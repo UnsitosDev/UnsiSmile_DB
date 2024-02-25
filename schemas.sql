@@ -123,8 +123,8 @@ create table frente_facial(
 
 CREATE TABLE examen_facial (
     id_examen_facial BIGINT PRIMARY KEY AUTO_INCREMENT,
-    fk_perfil BIGINT,
-    fk_frente BIGINT, -- ajusta según tu modelo de datos
+    fk_perfil int,
+    fk_frente int, -- ajusta según tu modelo de datos
     senias_particulares TEXT,
     FOREIGN KEY (fk_perfil) REFERENCES perfil_facial(perfil_facilaID),
     FOREIGN KEY (fk_frente) REFERENCES frente_facial(frente_facilaID) -- ajusta según tu modelo de datos
