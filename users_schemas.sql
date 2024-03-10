@@ -83,6 +83,7 @@ create table
         id_semestre int AUTO_INCREMENT PRIMARY KEY,
         fk_grupo int,
         fk_ciclo int,
+        activo BOOLEAN DEFAULT true,
         foreign key (fk_grupo) references grupos (id_grupo),
         foreign key (fk_ciclo) references ciclos (id_ciclo)
     );
@@ -112,6 +113,6 @@ create table
         id_alumno_semestre int,
         fk_alumno int,
         fk_semestre int,
-        FOREIGN KEY (fk_alumno) references alumnos(id_alumno),
-        FOREIGN KEY (fk_semestre) references semestres(id_semestre)
+        FOREIGN KEY (fk_alumno) references alumnos (id_alumno),
+        FOREIGN KEY (fk_semestre) references semestres (id_semestre)
     );
