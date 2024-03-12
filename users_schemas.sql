@@ -19,23 +19,32 @@ CREATE TABLE
         id_usuario INT auto_increment PRIMARY KEY,
         nombre_usuario VARCHAR(20) NOT NULL,
         pass_usuario VARCHAR(15) NOT NULL,
-        f_id_rol int NOT NULL,
+        fk_id_rol int NOT NULL,
         estatus boolean default true,
-        foreign key (f_id_rol) references roles_tipos_usuario (id_rol)
+        foreign key (fk_id_rol) references roles_tipos_usuario (id_rol)
     );
 
 -- ************************************ ESQUEMAS PARA LOS GRUPOS **************************************************
 create table
+    carreras (
+        id_carrera int AUTO_INCREMENT PRIMARY KEY,
+        carrera varchar(100),
+        codigo varchar (3)
+    );
+
+create table
     grupos (
         id_grupo int auto_increment primary key,
         grupo varchar(100),
-        semestre int
+        fk_carrera int,
+        foreign key (fk_carrera) references carreras (id_carrera)
     );
 
 create table
     ciclos (
         id_ciclo int AUTO_INCREMENT PRIMARY KEY,
-        ciclo varchar(100)
+        ciclo varchar(100),
+        activo BOOLEAN DEFAULT true
     );
 
 -- ******************************************** ESQUEMAS DE USUARIOS DE LA APLICACION (usuarios finales)*******************************
@@ -50,7 +59,7 @@ create table
         curp varchar(20),
         telefono varchar(10),
         fecha_nacimiento date,
-        sexo char, -- cambiar a entidad catálogo,
+        sexo char, -- cambiar a entidad catálogo
         correo varchar(200)
     );
 
@@ -83,7 +92,6 @@ create table
         id_semestre int AUTO_INCREMENT PRIMARY KEY,
         fk_grupo int,
         fk_ciclo int,
-        activo BOOLEAN DEFAULT true,
         foreign key (fk_grupo) references grupos (id_grupo),
         foreign key (fk_ciclo) references ciclos (id_ciclo)
     );
