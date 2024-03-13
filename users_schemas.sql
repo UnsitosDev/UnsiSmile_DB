@@ -19,9 +19,9 @@ CREATE TABLE
         id_usuario INT auto_increment PRIMARY KEY,
         nombre_usuario VARCHAR(20) NOT NULL,
         pass_usuario VARCHAR(15) NOT NULL,
-        fk_id_rol int NOT NULL,
+        fk_rol int NOT NULL,
         estatus boolean default true,
-        foreign key (fk_id_rol) references roles_tipos_usuario (id_rol)
+        foreign key (fk_rol) references roles_tipos_usuario (id_rol)
     );
 
 -- ************************************ ESQUEMAS PARA LOS GRUPOS **************************************************
@@ -50,12 +50,11 @@ create table
 -- tablas administradores de clinica
 create table
     personas (
-        id_persona int AUTO_INCREMENT PRIMARY key,
+        curp varchar(20) PRIMARY key,
         nombre1 varchar(50),
         nombre2 varchar(50),
         apellido1 varchar(50),
         apellido2 varchar(50),
-        curp varchar(20),
         telefono varchar(10),
         fecha_nacimiento date,
         correo varchar(200),
@@ -66,8 +65,7 @@ create table
 
 create table
     administradores (
-        id_administrador int not null auto_increment primary key,
-        numero_trabajador varchar(15),
+        numero_trabajador varchar(15) primary key,
         -- email_admin varchar(100) not NULL, --SE  QUITÓ DE AQUÍ PORQUE PERSONA YA GUARDA UN CORREO
         fk_persona int,
         fk_usuario int,
@@ -78,14 +76,13 @@ create table
 -- ************************datos de personal de salud***********************************
 create table
     catedraticos (
-        id_catedratico int not null auto_increment primary key,
-        numero_trabajador varchar(15),
+        numero_trabajador varchar(15) primary key,
         -- email_catedratico varchar(100) not NULL,--SE  QUITÓ DE AQUÍ PORQUE PERSONA YA GUARDA UN CORREO
         fk_usuario int,
         fk_persona int,
         foreign key (fk_persona) references personas (id_persona),
-        fk_id_usuario int not null,
-        FOREIGN KEY (fk_id_usuario) references usuarios (id_usuario)
+        fk_usuario int not null,
+        FOREIGN KEY (fk_usuario) references usuarios (id_usuario)
     );
 
 create table
@@ -108,13 +105,11 @@ create table
 
 create table
     alumnos (
-        id_alumno int not null auto_increment primary key,
-        fk_id_semestre_grupo int,
-        matricula varchar(10),
+        matricula varchar(10) primary key,
         fk_usuario int,
         fk_persona int,
         foreign key (fk_persona) references personas (id_persona),
-        FOREIGN KEY (fk_usuario) references usuarios (id_usuario)
+        FOREIGN KEY (fk_usuario) references usuarios (id_usuario),
     );
 
 create table
