@@ -27,9 +27,8 @@ CREATE TABLE
 -- ************************************ ESQUEMAS PARA LOS GRUPOS **************************************************
 create table
     carreras (
-        id_carrera int AUTO_INCREMENT PRIMARY KEY,
+        id_carrera varchar (2) PRIMARY KEY,
         carrera varchar(100),
-        codigo varchar (3)
     );
 
 create table
@@ -44,7 +43,7 @@ create table
     ciclos (
         id_ciclo int AUTO_INCREMENT PRIMARY KEY,
         ciclo varchar(100),
-        activo BOOLEAN DEFAULT true
+        estatus BOOLEAN DEFAULT true
     );
 
 -- ******************************************** ESQUEMAS DE USUARIOS DE LA APLICACION (usuarios finales)*******************************
@@ -59,15 +58,17 @@ create table
         curp varchar(20),
         telefono varchar(10),
         fecha_nacimiento date,
-        sexo char, -- cambiar a entidad catálogo
-        correo varchar(200)
+        correo varchar(200),
+        fk_sexo int,
+            Foreign Key (fk_sexo) REFERENCES sexo(id_sexo) on delete CASCADE on update CASCADE
+
     );
 
 create table
     administradores (
         id_administrador int not null auto_increment primary key,
         numero_trabajador varchar(15),
-        email_admin varchar(100) not NULL,
+        -- email_admin varchar(100) not NULL, --SE  QUITÓ DE AQUÍ PORQUE PERSONA YA GUARDA UN CORREO
         fk_persona int,
         fk_usuario int,
         foreign key (fk_persona) references personas (id_persona),
@@ -79,7 +80,7 @@ create table
     catedraticos (
         id_catedratico int not null auto_increment primary key,
         numero_trabajador varchar(15),
-        email_catedratico varchar(100) not NULL,
+        -- email_catedratico varchar(100) not NULL,--SE  QUITÓ DE AQUÍ PORQUE PERSONA YA GUARDA UN CORREO
         fk_usuario int,
         fk_persona int,
         foreign key (fk_persona) references personas (id_persona),

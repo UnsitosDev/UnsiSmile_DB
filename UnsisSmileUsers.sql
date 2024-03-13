@@ -263,6 +263,10 @@ CREATE TABLE colonias_has_calles (
 
 
 
+
+
+
+
 -- Crear la tabla Responsables
 CREATE TABLE Responsables (
     id_responsable BIGINT AUTO_INCREMENT PRIMARY KEY, nombre VARCHAR(50), apellido VARCHAR(50), telefono VARCHAR(20) UNIQUE, correo_electronico VARCHAR(50)
@@ -283,13 +287,6 @@ CREATE TABLE ocupaciones (
     id_ocupacion BIGINT PRIMARY KEY, ocupacion VARCHAR(100) UNIQUE
 );
 
-CREATE TABLE grupos_etnico (
-    id_grupo_etinico BIGINT PRIMARY KEY, grupo_etnico VARCHAR(100) UNIQUE
-);
-
-CREATE TABLE religiones (
-    id_religion BIGINT PRIMARY KEY, religion VARCHAR(100) UNIQUE
-);
 
 CREATE TABLE nacionalidades (
     id_nacionalidad BIGINT PRIMARY KEY, nacionalidad VARCHAR(100) UNIQUE
@@ -299,9 +296,5 @@ CREATE TABLE signos_vitales (
     id_signos_vitales INT NOT NULL AUTO_INCREMENT PRIMARY KEY, peso FLOAT, estatura FLOAT, temperatura FLOAT, frecuencia_cardiaca FLOAT, frecuencia_respiratoria FLOAT, presion_arterial FLOAT, saturacion_oxigeno FLOAT, glucosa FLOAT, pulso FLOAT
 );
 
--- Crear la tabla Pacientes
-CREATE TABLE Pacientes (
-    id_paciente BIGINT AUTO_INCREMENT PRIMARY KEY, primer_nombre VARCHAR(50), segundo_nombre VARCHAR(50), primer_apellido VARCHAR(50), segundo_apellido VARCHAR(50), fecha_nacimiento DATE, correo_electronico VARCHAR(200), FK_direccion BIGINT, FK_sexo BIGINT, FK_edo_civil BIGINT, FK_ocupacion BIGINT, fk_grupo_etnico BIGINT, FK_religion BIGINT, FK_nacionalidad BIGINT, fecha_Ingreso DATE, telefono VARCHAR(20), es_menor BOOLEAN, FK_Responsable BIGINT, discapacidad BOOLEAN, FOREIGN KEY (FK_direccion) REFERENCES direcciones (id_direccion) ON DELETE CASCADE ON UPDATE CASCADE, FOREIGN KEY (FK_sexo) REFERENCES sexos (id_sexo), FOREIGN KEY (FK_edo_civil) REFERENCES Estado_civil (id_edo_civil), FOREIGN KEY (FK_ocupacion) REFERENCES ocupaciones (id_ocupacion), FOREIGN KEY (fk_grupo_etnico) REFERENCES grupos_etnico (id_grupo_etinico), FOREIGN KEY (FK_religion) REFERENCES religiones (id_religion), FOREIGN KEY (FK_nacionalidad) REFERENCES nacionalidades (id_nacionalidad), FOREIGN KEY (FK_Responsable) REFERENCES Responsables (id_responsable) ON DELETE CASCADE ON UPDATE CASCADE
-);
 
 -- administradores, profesores, estudiantes
