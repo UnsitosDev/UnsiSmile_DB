@@ -5,34 +5,30 @@ CREATE TABLE pacientes (
     apellido_paterno TEXT,
     apellido_materno TEXT,
     nivel_socioeconomico TEXT,
-    fk_vivienda int,
+    telefono_1 VARCHAR(15),
+    telefono_2 VARCHAR(15),
     fk_tipo_sanguineo int,
     fk_discapacidad int,
     fk_grupo_etnico int,
     fk_religion int,
-    FOREIGN KEY (fk_vivienda) REFERENCES vivienda (id_vivienda) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (fk_tipo_sanguineo) REFERENCES tipo_sanguineo (id_tipo_sanguineo) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (fk_discapacidad) REFERENCES discapacidad (id_discapacidad) ON DELETE CASCADE ON UPDATE CASCADE,
+    fk_domicilio int,
+    FOREIGN KEY (fk_tipo_sanguineo) REFERENCES tipo_sanguineo (id_tipo) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (fk_discapacidad) REFERENCES discapacidades (id_discapacidad) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (fk_grupo_etnico) REFERENCES grupo_etnico (id_grupo_etnico) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (fk_religion) REFERENCES religion (id_religion) ON DELETE CASCADE ON UPDATE CASCADE);
+    FOREIGN KEY (fk_religion) REFERENCES religiones (id_religion) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (fk_domicilio) REFERENCES domicilios (id_domicilio) ON DELETE CASCADE ON UPDATE CASCADE);
 
-CREATE Table domicilio(
+
+CREATE Table domicilios(
     id_domicilio int auto_increment not null PRIMARY KEY,
-    tipo ,
-    calle TEXT,
     numero_ext TEXT,
     numero_int TEXT,
-    fk_estado int,
-    fk_municipio int,
+    fk_vivienda VARCHAR(2),
     fk_localidad int,
-    colonia TEXT,
-    fk_codigo_postal int,
-    telefono_1 VARCHAR(15),
-    telefono_2 VARCHAR(15),
-        FOREIGN KEY (fk_estado) REFERENCES estado (id_estado) ON DELETE CASCADE ON UPDATE CASCADE,
-        FOREIGN KEY (fk_municipio) REFERENCES municipio (id_municipio) ON DELETE CASCADE ON UPDATE CASCADE,
-        FOREIGN KEY (fk_localidad) REFERENCES localidad (id_localidad) ON DELETE CASCADE ON UPDATE CASCADE,
-        FOREIGN KEY (fk_codigo_postal) REFERENCES codigo_postal (id_codigo_postal) ON DELETE CASCADE ON UPDATE CASCADE
+    fk_colonias_has_calles  int,
+        FOREIGN KEY (fk_vivienda) REFERENCES viviendas (id_vivienda) ON DELETE CASCADE ON UPDATE CASCADE,
+        FOREIGN KEY (fk_localidad) REFERENCES localidades (id_localidad) ON DELETE CASCADE ON UPDATE CASCADE,
+        FOREIGN KEY (fk_colonias_has_calles) REFERENCES colonias_has_calles (id_colonias_has_calles) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 --Tabla Ususarios
@@ -190,6 +186,79 @@ create table guias_clinicas(
 );
 
 
+-- tabla catalogo  de vivienda
+create  table viviendas(
+    id_vivienda VARCHAR(2) PRIMARY key,
+    categoria TEXT
+);
+
+-- tabla catalogo  de tipo sanguineo
+create  table tipo_sanguineo(
+    id_tipo INT PRIMARY KEY,
+    tipo VARCHAR(3) NOT NULL
+);
+
+CREATE TABLE compatibilidad_sanguinea (
+    fk_tipo int,
+    fk_tipo_compatible int,
+    FOREIGN KEY (fk_tipo) REFERENCES tipo_sanguineo(id_tipo),
+    FOREIGN KEY (fk_tipo_compatible) REFERENCES tipo_sanguineo(id_tipo),
+    PRIMARY KEY (fk_tipo, fk_tipo_compatible)
+);
+
+create  table discapacidades(
+    id_discapacidad INT PRIMARY KEY,
+    tipo TEXT
+);
+
+CREATE TABLE grupos_etnicos (
+    id_grupo INT PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE religiones (
+    id_religion varchar(6) PRIMARY KEY,
+    religion VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE estados (
+    id_estado varchar(2) PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE municipios (
+    id_municipio varchar(2) PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL,
+    fk_estado varchar(2),
+        FOREIGN KEY (fk_estado) REFERENCES estados (id_estado) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE localidades (
+    id_localidad varchar(2) PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL,
+    fk_municipio varchar(2),
+    fk_codigo_postal int,
+        FOREIGN KEY (fk_municipio) REFERENCES municipios (id_municipio) ON DELETE CASCADE ON UPDATE CASCADE,
+        FOREIGN KEY (fk_codigo_postal) REFERENCES codigo_postal (id_codigo_postal) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE colonias (
+    id_colonia int PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE calles (
+    id_calle int PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE colonias_has_calles (
+    id_colonias_has_calles int PRIMARY key,
+    fk_colonia int not null,
+    fk_calle int NOT NULL,
+        FOREIGN KEY (fk_colonia) REFERENCES colonias (id_colonia) ON DELETE CASCADE ON UPDATE CASCADE,
+        FOREIGN KEY (fk_calle) REFERENCES calles (id_calle) ON DELETE CASCADE ON UPDATE CASCADE
+);
 
 
 
