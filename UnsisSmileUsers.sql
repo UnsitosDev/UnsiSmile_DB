@@ -1,300 +1,287 @@
---Table pacientes
-CREATE TABLE pacientes (
+-- Table patients
+CREATE TABLE patients (
     curp VARCHAR(20) UNIQUE PRIMARY KEY,
-    nombre TEXT,
-    apellido_paterno TEXT,
-    apellido_materno TEXT,
-    nivel_socioeconomico TEXT,
-    telefono_1 VARCHAR(15),
-    telefono_2 VARCHAR(15),
-    fk_tipo_sanguineo int,
-    fk_discapacidad int,
-    fk_grupo_etnico int,
+    first_name TEXT,
+    last_name TEXT,
+    paternal_last_name TEXT,
+    socioeconomic_level TEXT,
+    phone_1 VARCHAR(15),
+    phone_2 VARCHAR(15),
+    fk_blood_type int,
+    fk_disability int,
+    fk_ethnic_group int,
     fk_religion int,
-    fk_domicilio int,
-    FOREIGN KEY (fk_tipo_sanguineo) REFERENCES tipo_sanguineo (id_tipo) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (fk_discapacidad) REFERENCES discapacidades (id_discapacidad) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (fk_grupo_etnico) REFERENCES grupo_etnico (id_grupo_etnico) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (fk_religion) REFERENCES religiones (id_religion) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (fk_domicilio) REFERENCES domicilios (id_domicilio) ON DELETE CASCADE ON UPDATE CASCADE);
-
-
-CREATE Table domicilios(
-    id_domicilio int auto_increment not null PRIMARY KEY,
-    numero_ext TEXT,
-    numero_int TEXT,
-    fk_vivienda VARCHAR(2),
-    fk_localidad int,
-    fk_colonias_has_calles  int,
-        FOREIGN KEY (fk_vivienda) REFERENCES viviendas (id_vivienda) ON DELETE CASCADE ON UPDATE CASCADE,
-        FOREIGN KEY (fk_localidad) REFERENCES localidades (id_localidad) ON DELETE CASCADE ON UPDATE CASCADE,
-        FOREIGN KEY (fk_colonias_has_calles) REFERENCES colonias_has_calles (id_colonias_has_calles) ON DELETE CASCADE ON UPDATE CASCADE
+    fk_address int,
+    FOREIGN KEY (fk_blood_type) REFERENCES blood_type (id_type) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (fk_disability) REFERENCES disabilities (id_disability) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (fk_ethnic_group) REFERENCES ethnic_group (id_ethnic_group) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (fk_religion) REFERENCES religions (id_religion) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (fk_address) REFERENCES addresses (id_address) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
---Tabla Ususarios
-CREATE Table usuarios(
-    cedula VARCHAR(10) UNIQUE  PRIMARY KEY,
+CREATE TABLE addresses (
+    id_address int auto_increment not null PRIMARY KEY,
+    street_number TEXT,
+    interior_number TEXT,
+    fk_housing VARCHAR(2),
+    fk_street int,
+        FOREIGN KEY (fk_housing) REFERENCES housings (id_housing) ON DELETE CASCADE ON UPDATE CASCADE,
+        FOREIGN KEY (fk_street) REFERENCES streets (id_street) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- Users Table
+CREATE TABLE users(
+    cedula VARCHAR(10) UNIQUE PRIMARY KEY,
     curp VARCHAR(20),
-    nombre  TEXT,
-    apellido_paterno TEXT,
-    apellido_materno TEXT,
-    fk_especialidad INT,
-    fk_sub_especialidad INT,
-    fk_domicilio int,
+    first_name TEXT,
+    last_name TEXT,
+    fk_specialty INT,
+    fk_sub_specialty INT,
+    fk_address int,
     fk_clues INT,
-    fk_rol INT,
-        FOREIGN KEY (fk_especialidad) REFERENCES especialidad (id_especialidad) ON DELETE CASCADE ON UPDATE CASCADE
-        FOREIGN KEY (fk_sub_especialidad) REFERENCES sub_especialidad (id_sub_especialidad) ON DELETE CASCADE ON UPDATE CASCADE
-        FOREIGN KEY (fk_domicilio) REFERENCES domicilio (id_domicilio) ON DELETE CASCADE ON UPDATE CASCADE
-        FOREIGN KEY (fk_clues) REFERENCES clues (id_clue) ON DELETE CASCADE ON UPDATE CASCADE
-        FOREIGN KEY (fk_rol) REFERENCES roles (id_rol) ON DELETE CASCADE ON UPDATE CASCADE
-    );
-
---tabla recetas
-CREATE Table recetas(
-    id_receta int PRIMARY  KEY,
-    medico VARCHAR(50),--- pendiente a verificar la  relación
-    medicamento TEXT,
-    unidad_de_medida TEXT,
-    dosis int,
-    frecuencia TEXT,
-    fk_via_de_administracion int,
-    fecha_inicio  DATE,
-    fecha_fin DATE,
-        FOREIGN KEY (fk_via_de_administracion) REFERENCES via_de_administracion (id_via_de_administracion) ON DELETE CASCADE ON UPDATE CASCADE
+    fk_role INT,
+        FOREIGN KEY (fk_specialty) REFERENCES specialty (id_specialty) ON DELETE CASCADE ON UPDATE CASCADE,
+        FOREIGN KEY (fk_sub_specialty) REFERENCES sub_specialty (id_sub_specialty) ON DELETE CASCADE ON UPDATE CASCADE,
+        FOREIGN KEY (fk_address) REFERENCES address (id_address) ON DELETE CASCADE ON UPDATE CASCADE,
+        FOREIGN KEY (fk_clues) REFERENCES clues (id_clue) ON DELETE CASCADE ON UPDATE CASCADE,
+        FOREIGN KEY (fk_role) REFERENCES roles (id_role) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
---  tabla ordenes
-CREATE  Table  ordenes(
-    id_orden  int auto_increment PRIMARY KEY,
-    fecha date,
-    id_tipo INT,
-    instrucciones_de_suministro TEXT,
-    instrucciones_adicionales TEXT,
-    medico VARCHAR(50),--- pendiente a verificar la  relación
-    fk_paciente VARCHAR(20),
-    destinatario VARCHAR(50),--- pendiente a verificar la  relación
-    fk_medicamento INT,
-    bool_consentimiento BOOLEAN,
-    impresion_diagnostica TEXT,
-    fecha_inicio date,
-    fecha_entrega  date,
-    fecha_termino date,
-    fk_diagnostico INT,
-    fk_cie9mc int,--verificar  se refiere a  tipo de procedimiento
-    fk_estatus int,--estado de la orden
-    fk_prioridad int,
-        FOREIGN KEY (fk_paciente) REFERENCES pacientes (curp) ON DELETE CASCADE ON UPDATE CASCADE,
-        FOREIGN KEY (fk_medicamento) REFERENCES medicamentos (id_medicamento) ON DELETE CASCADE ON UPDATE CASCADE
-        FOREIGN KEY (fk_diagnostico) REFERENCES diagnosticos (id_diagnostico) ON DELETE CASCADE ON UPDATE CASCADE
-        FOREIGN KEY (fk_cie9mc) REFERENCES procedimientos (id_procedimiento) ON DELETE CASCADE ON UPDATE CASCADE
-        FOREIGN KEY (fk_estatus) REFERENCES estatus (id_estatus) ON DELETE CASCADE ON UPDATE CASCADE
-        FOREIGN KEY (fk_prioridad) REFERENCES prioridad (id_prioridad) ON DELETE CASCADE ON UPDATE CASCADE
+-- Prescriptions Table
+CREATE TABLE prescriptions(
+    id_prescription int PRIMARY KEY,
+    doctor VARCHAR(50),--- pending to verify the relationship
+    medication TEXT,
+    unit_of_measure TEXT,
+    dosage int,
+    frequency TEXT,
+    fk_route_of_administration int,
+    start_date DATE,
+    end_date DATE,
+        FOREIGN KEY (fk_route_of_administration) REFERENCES route_of_administration (id_route_of_administration) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
--- tabla  auxiliar de  diaagnostico
-CREATE TABLE auxiliar_de_diagnostico(
-    id_auxiliar INT PRIMARY KEY,
-    fk_tipo_de_estudio int,
-    fk_diagnostico_relacionado INT,
-    fk_urgencia INT,
-    indicaciones TEXT,
-    Foreign Key (fk_tipo_de_estudio) REFERENCES tipo_de_estudio(id_tipo_de_estudio) on delete CASCADE on update CASCADE,
-    Foreign Key (fk_diagnostico_relacionado) REFERENCES diagnostico_relacionado(id_diagnostico_relacionado) on delete CASCADE on update CASCADE.BIGINT
-    Foreign Key (fk_urgencia) REFERENCES urgencias(id_urgencia) on delete CASCADE on update CASCADE
+-- Orders Table
+CREATE TABLE orders(
+    id_order int auto_increment PRIMARY KEY,
+    date date,
+    id_type INT,
+    supply_instructions TEXT,
+    additional_instructions TEXT,
+    doctor VARCHAR(50),--- pending to verify the relationship
+    fk_patient VARCHAR(20),
+    recipient VARCHAR(50),--- pending to verify the relationship
+    fk_medication INT,
+    consent BOOLEAN,
+    diagnostic_impression TEXT,
+    start_date date,
+    delivery_date date,
+    end_date date,
+    fk_diagnosis INT,
+    fk_cie9mc int,--verify refers to procedure type
+    fk_status int,--order status
+    fk_priority int,
+        FOREIGN KEY (fk_patient) REFERENCES patients (curp) ON DELETE CASCADE ON UPDATE CASCADE,
+        FOREIGN KEY (fk_medication) REFERENCES medications (id_medication) ON DELETE CASCADE ON UPDATE CASCADE,
+        FOREIGN KEY (fk_diagnosis) REFERENCES diagnoses (id_diagnosis) ON DELETE CASCADE ON UPDATE CASCADE,
+        FOREIGN KEY (fk_cie9mc) REFERENCES procedures (id_procedure) ON DELETE CASCADE ON UPDATE CASCADE,
+        FOREIGN KEY (fk_status) REFERENCES status (id_status) ON DELETE CASCADE ON UPDATE CASCADE,
+        FOREIGN KEY (fk_priority) REFERENCES priority (id_priority) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-create TABLE banco_de_sangre(
-    fk_tipo_de_sangre int,
-    identificador_producto int,
-    cantidad int,
-    fk_unidades int,
-    seguimiento TEXT,
-    tiempo_de_administracion TEXT,
-        Foreign Key (fk_tipo_de_sangre) REFERENCES tipo_de_sangre(id_tipo_de_sangre) on delete CASCADE on update CASCADE,
-        Foreign Key (fk_unidades) REFERENCES unidades(id_unidades) on delete CASCADE on update CASCADE
+-- Diagnostic Auxiliary Table
+CREATE TABLE diagnostic_auxiliary(
+    id_auxiliary INT PRIMARY KEY,
+    fk_study_type int,
+    fk_related_diagnosis INT,
+    fk_emergency INT,
+    indications TEXT,
+    Foreign Key (fk_study_type) REFERENCES study_type(id_study_type) on delete CASCADE on update CASCADE,
+    Foreign Key (fk_related_diagnosis) REFERENCES related_diagnosis(id_related_diagnosis) on delete CASCADE on update CASCADE,
+    Foreign Key (fk_emergency) REFERENCES emergencies(id_emergency) on delete CASCADE on update CASCADE.BIGINT
 );
 
--- Tabla alergias
-create table alergias (
-    fk_reacciones_alergicas int,
-    descripcion TEXT,
-    fk_medicamento int,
-    fecha_deteccion DATE,
-        Foreign Key (fk_reacciones_alergicas) REFERENCES reacciones_alergicas(id_reacciones_alergicas) on delete CASCADE on update CASCADE,
-        Foreign Key (fk_medicamento) REFERENCES medicamentos(id_medicamento) on delete CASCADE on update CASCADE
+CREATE TABLE blood_bank(
+    fk_blood_type int,
+    product_identifier int,
+    quantity int,
+    fk_units int,
+    tracking TEXT,
+    administration_time TEXT,
+        Foreign Key (fk_blood_type) REFERENCES blood_type(id_blood_type) on delete CASCADE on update CASCADE,
+        Foreign Key (fk_units) REFERENCES units(id_units) on delete CASCADE on update CASCADE
 );
 
--- Tabla documento externo
-create table documento_externo(
-    clave_documento int not null PRIMARY key,
-    nombre_documento TEXT,
-    fuente TEXT,
-    fecha_creacion date,
-    fk_paciente int,
-        Foreign Key (fk_paciente) REFERENCES pacientes(curp) on delete CASCADE on update CASCADE
+-- Allergies Table
+CREATE TABLE allergies (
+    fk_allergic_reactions int,
+    description TEXT,
+    fk_medication int,
+    detection_date DATE,
+        Foreign Key (fk_allergic_reactions) REFERENCES allergic_reactions(id_allergic_reactions) on delete CASCADE on update CASCADE,
+        Foreign Key (fk_medication) REFERENCES medications(id_medication) on delete CASCADE on update CASCADE
 );
 
--- Tabla alerta sanitaria
-create table alerta_sanitaria(
-    fk_tipo_de_riesgo int,
-    fk_prioridad int,
-    acciones_aplicables TEXT,
-    factores_de_riesgo TEXT,
-    edad_minima int,
-    edad_maxima int,
-    fk_sexo int,
-    fk_estado int,
-    fk_municipio int,
-    fk_localidad int,
-    tiempo_notificacion TEXT,
-        Foreign Key (fk_tipo_de_riesgo) REFERENCES tipo_de_riesgo(id_tipo_de_riesgo) on delete CASCADE on update CASCADE,
-        Foreign Key (fk_prioridad) REFERENCES prioridad(id_prioridad) on delete CASCADE on update CASCADE,
-        Foreign Key (fk_sexo) REFERENCES sexo(id_sexo) on delete CASCADE on update CASCADE,
-        Foreign Key (fk_estado) REFERENCES estados(id_estado) on delete CASCADE on update CASCADE,
-        Foreign Key (fk_municipio) REFERENCES municipios(id_municipio) on delete CASCADE on update CASCADE,
-        Foreign Key (fk_localidad) REFERENCES localidades(id_localidad) on delete CASCADE on update CASCADE
+-- External Document Table
+CREATE TABLE external_document(
+    document_key int not null PRIMARY key,
+    document_name TEXT,
+    source TEXT,
+    creation_date date,
+    fk_patient int,
+        Foreign Key (fk_patient) REFERENCES patients(curp) on delete CASCADE on update CASCADE
 );
 
--- tabla casos notificables
-create table casos_notificables(
-    fk_medico int,
-    fk_paciente VARCHAR(20),
-    resumen_clinico TEXT,
-    descripcion_de_acciones TEXT,
-    fk_riesgos_identificados int,
-        Foreign Key (fk_medico) REFERENCES medicos(id_medico) on delete CASCADE on update CASCADE,
-        Foreign Key (fk_paciente) REFERENCES pacientes(curp) on delete CASCADE on update CASCADE,
-        Foreign Key (fk_riesgos_identificados) REFERENCES riesgos_identificados(id_riesgo) on delete CASCADE on update CASCADE
+-- Health Alert Table
+CREATE TABLE health_alert(
+    fk_type_of_risk int,
+    fk_priority int,
+    applicable_actions TEXT,
+    risk_factors TEXT,
+    min_age int,
+    max_age int,
+    fk_sex int,
+    fk_state int,
+    fk_municipality int,
+    fk_location int,
+    notification_time TEXT,
+        Foreign Key (fk_type_of_risk) REFERENCES type_of_risk(id_type_of_risk) on delete CASCADE on update CASCADE,
+        Foreign Key (fk_priority) REFERENCES priority(id_priority) on delete CASCADE on update CASCADE,
+        Foreign Key (fk_sex) REFERENCES sex(id_sex) on delete CASCADE on update CASCADE,
+        Foreign Key (fk_state) REFERENCES states(id_state) on delete CASCADE on update CASCADE,
+        Foreign Key (fk_municipality) REFERENCES municipalities(id_municipality) on delete CASCADE on update CASCADE,
+        Foreign Key (fk_location) REFERENCES locations(id_location) on delete CASCADE on update CASCADE
 );
 
--- Tabla guías clinicas
-create table guias_clinicas(
-    clave_guia int not null PRIMARY key,
-    fecha_aplicacion date,
-    nombre_guia TEXT,
-    fk_diagnostico_relacionado int,
-    fk_procedimiento_relacionado int,
-    descripcion TEXT,
-    edad_minima int,
-    edad_maxima int,
-    fk_sexo int,
-        Foreign Key (fk_diagnostico_relacionado) REFERENCES diagnostico_relacionado(id_diagnostico) on delete CASCADE on update CASCADE,
-        Foreign Key (fk_procedimiento_relacionado) REFERENCES procedimiento_relacionado(id_procedimiento) on delete CASCADE on update CASCADE,
-        Foreign Key (fk_sexo) REFERENCES sexo(id_sexo) on delete CASCADE on update CASCADE
-
+-- Notifiable Cases Table
+CREATE TABLE notifiable_cases(
+    fk_doctor int,
+    fk_patient VARCHAR(20),
+    clinical_summary TEXT,
+    action_description TEXT,
+    fk_identified_risks int,
+        Foreign Key (fk_doctor) REFERENCES doctors(id_doctor) on delete CASCADE on update CASCADE,
+        Foreign Key (fk_patient) REFERENCES patients(curp) on delete CASCADE on update CASCADE,
+        Foreign Key (fk_identified_risks) REFERENCES identified_risks(id_risk) on delete CASCADE on update CASCADE
 );
 
+-- Clinical Guidelines Table
+CREATE TABLE clinical_guidelines(
+    guideline_key int not null PRIMARY key,
+    application_date date,
+    guideline
 
--- tabla catalogo  de vivienda
-create  table viviendas(
-    id_vivienda VARCHAR(2) PRIMARY key,
-    categoria TEXT
+_name TEXT,
+    fk_related_diagnosis int,
+    fk_related_procedure int,
+    description TEXT,
+    min_age int,
+    max_age int,
+    fk_sex int,
+        Foreign Key (fk_related_diagnosis) REFERENCES related_diagnosis(id_diagnosis) on delete CASCADE on update CASCADE,
+        Foreign Key (fk_related_procedure) REFERENCES related_procedure(id_procedure) on delete CASCADE on update CASCADE,
+        Foreign Key (fk_sex) REFERENCES sex(id_sex) on delete CASCADE on update CASCADE
 );
 
--- tabla catalogo  de tipo sanguineo
-create  table tipo_sanguineo(
-    id_tipo INT PRIMARY KEY,
-    tipo VARCHAR(3) NOT NULL
+-- Housing Catalog Table
+CREATE TABLE housings(
+    id_housing VARCHAR(2) PRIMARY key,
+    category TEXT
 );
 
-CREATE TABLE compatibilidad_sanguinea (
-    fk_tipo int,
-    fk_tipo_compatible int,
-    FOREIGN KEY (fk_tipo) REFERENCES tipo_sanguineo(id_tipo),
-    FOREIGN KEY (fk_tipo_compatible) REFERENCES tipo_sanguineo(id_tipo),
-    PRIMARY KEY (fk_tipo, fk_tipo_compatible)
+-- Blood Type Catalog Table
+CREATE TABLE blood_type(
+    id_type INT PRIMARY KEY,
+    type VARCHAR(3) NOT NULL
 );
 
-create  table discapacidades(
-    id_discapacidad INT PRIMARY KEY,
-    tipo TEXT
+CREATE TABLE blood_compatibility (
+    fk_type int,
+    fk_compatible_type int,
+    FOREIGN KEY (fk_type) REFERENCES blood_type(id_type),
+    FOREIGN KEY (fk_compatible_type) REFERENCES blood_type(id_type),
+    PRIMARY KEY (fk_type, fk_compatible_type)
 );
 
-CREATE TABLE grupos_etnicos (
-    id_grupo INT PRIMARY KEY,
-    nombre VARCHAR(50) NOT NULL
+CREATE TABLE disabilities(
+    id_disability INT PRIMARY KEY,
+    type TEXT
 );
 
-CREATE TABLE religiones (
+CREATE TABLE ethnic_groups (
+    id_group INT PRIMARY KEY,
+    name VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE religions (
     id_religion varchar(6) PRIMARY KEY,
     religion VARCHAR(100) NOT NULL
 );
 
-CREATE TABLE estados (
-    id_estado varchar(2) PRIMARY KEY,
-    nombre VARCHAR(50) NOT NULL
+CREATE TABLE states (
+    id_state varchar(2) PRIMARY KEY,
+    name VARCHAR(50) NOT NULL
 );
 
-CREATE TABLE municipios (
-    id_municipio varchar(2) PRIMARY KEY,
-    nombre VARCHAR(50) NOT NULL,
-    fk_estado varchar(2),
-        FOREIGN KEY (fk_estado) REFERENCES estados (id_estado) ON DELETE CASCADE ON UPDATE CASCADE
+CREATE TABLE municipalities (
+    id_municipality varchar(4) PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    fk_state varchar(2),
+        FOREIGN KEY (fk_state) REFERENCES states (id_state) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE localidades (
-    id_localidad varchar(2) PRIMARY KEY,
-    nombre VARCHAR(50) NOT NULL,
-    fk_municipio varchar(2),
-    fk_codigo_postal int,
-        FOREIGN KEY (fk_municipio) REFERENCES municipios (id_municipio) ON DELETE CASCADE ON UPDATE CASCADE,
-        FOREIGN KEY (fk_codigo_postal) REFERENCES codigo_postal (id_codigo_postal) ON DELETE CASCADE ON UPDATE CASCADE
+CREATE TABLE locations (
+    id_location varchar(6) PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    fk_municipality varchar(4),
+    fk_postal_code int,
+        FOREIGN KEY (fk_municipality) REFERENCES municipalities (id_municipality) ON DELETE CASCADE ON UPDATE CASCADE,
+        FOREIGN KEY (fk_postal_code) REFERENCES postal_code (id_postal_code) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE colonias (
-    id_colonia int PRIMARY KEY,
-    nombre VARCHAR(50) NOT NULL
+CREATE TABLE neighborhoods (
+    id_neighborhood int PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    fk_location varchar(6),
+        FOREIGN KEY (fk_location) REFERENCES locations (id_location) ON DELETE CASCADE ON UPDATE CASCADE,
+
+
 );
 
-CREATE TABLE calles (
-    id_calle int PRIMARY KEY,
-    nombre VARCHAR(50) NOT NULL
+CREATE TABLE streets (
+    id_street int PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    fk_neighborhood int,
+        FOREIGN KEY (fk_neighborhood) REFERENCES neighborhoods (id_neighborhood) ON DELETE CASCADE ON UPDATE CASCADE,
 );
 
-CREATE TABLE colonias_has_calles (
-    id_colonias_has_calles int PRIMARY key,
-    fk_colonia int not null,
-    fk_calle int NOT NULL,
-        FOREIGN KEY (fk_colonia) REFERENCES colonias (id_colonia) ON DELETE CASCADE ON UPDATE CASCADE,
-        FOREIGN KEY (fk_calle) REFERENCES calles (id_calle) ON DELETE CASCADE ON UPDATE CASCADE
+-- Create the Responsible Table
+CREATE TABLE Responsibles (
+    id_responsible BIGINT AUTO_INCREMENT PRIMARY KEY, first_name VARCHAR(50), last_name VARCHAR(50), phone VARCHAR(20) UNIQUE, email VARCHAR(50)
 );
 
-
-
-
-
-
-
-
--- Crear la tabla Responsables
-CREATE TABLE Responsables (
-    id_responsable BIGINT AUTO_INCREMENT PRIMARY KEY, nombre VARCHAR(50), apellido VARCHAR(50), telefono VARCHAR(20) UNIQUE, correo_electronico VARCHAR(50)
+-- Create the Gender Table
+CREATE TABLE genders (
+    id_gender BIGINT PRIMARY KEY, gender VARCHAR(100) UNIQUE
 );
 
--- Crear la tabla Sexo
-CREATE TABLE sexos (
-    id_sexo BIGINT PRIMARY KEY, sexo VARCHAR(100) UNIQUE
+-- Create the Civil Status Table
+CREATE TABLE Civil_Status (
+    id_civil_status BIGINT PRIMARY KEY, civil_status VARCHAR(100) UNIQUE
 );
 
--- Crear la tabla Estado_civil
-CREATE TABLE Estado_civil (
-    id_edo_civil BIGINT PRIMARY KEY, edo_civil VARCHAR(100) UNIQUE
+-- Create the Occupation Table
+CREATE TABLE occupations (
+    id_occupation BIGINT PRIMARY KEY, occupation VARCHAR(100) UNIQUE
 );
 
--- Crear la tabla Ocupacion
-CREATE TABLE ocupaciones (
-    id_ocupacion BIGINT PRIMARY KEY, ocupacion VARCHAR(100) UNIQUE
+CREATE TABLE nationalities (
+    id_nationality BIGINT PRIMARY KEY, nationality VARCHAR(100) UNIQUE
 );
 
-
-CREATE TABLE nacionalidades (
-    id_nacionalidad BIGINT PRIMARY KEY, nacionalidad VARCHAR(100) UNIQUE
-);
-
-CREATE TABLE signos_vitales (
-    id_signos_vitales INT NOT NULL AUTO_INCREMENT PRIMARY KEY, peso FLOAT, estatura FLOAT, temperatura FLOAT, frecuencia_cardiaca FLOAT, frecuencia_respiratoria FLOAT, presion_arterial FLOAT, saturacion_oxigeno FLOAT, glucosa FLOAT, pulso FLOAT
+CREATE TABLE vital_signs (
+    id_vital_signs INT NOT NULL AUTO_INCREMENT PRIMARY KEY, weight FLOAT, height FLOAT, temperature FLOAT, heart_rate FLOAT, respiratory_rate FLOAT, blood_pressure FLOAT, oxygen_saturation FLOAT, glucose FLOAT, pulse FLOAT
 );
 
 
--- administradores, profesores, estudiantes
+-- administrators, teachers, students

@@ -112,10 +112,11 @@ CREATE TABLE
     );
 
 CREATE TABLE
-    student_semester (
-        id_student_semester INT,
+    students_semesters (
         fk_student INT,
         fk_semester INT,
         FOREIGN KEY (fk_student) REFERENCES students (id_student),
-        FOREIGN KEY (fk_semester) REFERENCES semesters (id_semester)
+        FOREIGN KEY (fk_semester) REFERENCES semesters (id_semester),
+            PRIMARY KEY (fk_student, fk_semester)
+
     );
