@@ -1,126 +1,122 @@
--- drop database unsis_smile;
-drop database if exists usuarios_unsis_smile;
+-- Drop database unsis_smile;
+DROP DATABASE IF EXISTS usuarios_unsis_smile;
 
-create database usuarios_unsis_smile;
+-- Create database usuarios_unsis_smile;
+CREATE DATABASE usuarios_unsis_smile;
 
-use usuarios_unsis_smile;
+-- Use usuarios_unsis_smile;
+USE usuarios_unsis_smile;
 
--- ******************************************** ESQUEMAS PARA LOS USUARIOS (LOGUEO) *******************************
--- Tabla tipos de roles
+-- ******************************************** SCHEMAS FOR USERS (LOGGING) *******************************
+-- Table for role types
 CREATE TABLE
-    roles_tipos_usuario (
-        id_rol INT auto_increment PRIMARY KEY,
-        nombre_rol VARCHAR(50) NOT NULL
+    roles_user_types (
+        id_role INT AUTO_INCREMENT PRIMARY KEY,
+        role_name VARCHAR(50) NOT NULL
     );
 
--- Tabla usuario
+-- User table
 CREATE TABLE
-    usuarios (
-        id_usuario INT auto_increment PRIMARY KEY,
-        nombre_usuario VARCHAR(20) NOT NULL,
-        pass_usuario VARCHAR(15) NOT NULL,
-        fk_id_rol int NOT NULL,
-        estatus boolean default true,
-        foreign key (fk_id_rol) references roles_tipos_usuario (id_rol)
+    users (
+        id_user INT AUTO_INCREMENT PRIMARY KEY,
+        username VARCHAR(20) NOT NULL,
+        password VARCHAR(15) NOT NULL,
+        fk_role INT NOT NULL,
+        status BOOLEAN DEFAULT TRUE,
+        FOREIGN KEY (fk_role) REFERENCES roles_user_types (id_role)
     );
 
--- ************************************ ESQUEMAS PARA LOS GRUPOS **************************************************
-create table
-    carreras (
-        id_carrera int AUTO_INCREMENT PRIMARY KEY,
-        carrera varchar(100),
-        codigo varchar (3)
+-- ************************************ SCHEMAS FOR GROUPS **************************************************
+CREATE TABLE
+    careers (
+        id_career VARCHAR(2) PRIMARY KEY,
+        career VARCHAR(100)
     );
 
-create table
-    grupos (
-        id_grupo int auto_increment primary key,
-        grupo varchar(100),
-        fk_carrera int,
-        foreign key (fk_carrera) references carreras (id_carrera)
+CREATE TABLE
+    groups (
+        id_group INT AUTO_INCREMENT PRIMARY KEY,
+        group_name VARCHAR(100),
+        fk_career INT,
+        FOREIGN KEY (fk_career) REFERENCES careers (id_career)
     );
 
-create table
-    ciclos (
-        id_ciclo int AUTO_INCREMENT PRIMARY KEY,
-        ciclo varchar(100),
-        activo BOOLEAN DEFAULT true
+CREATE TABLE
+    cycles (
+        id_cycle INT AUTO_INCREMENT PRIMARY KEY,
+        cycle_name VARCHAR(100),
+        status BOOLEAN DEFAULT TRUE
     );
 
--- ******************************************** ESQUEMAS DE USUARIOS DE LA APLICACION (usuarios finales)*******************************
--- tablas administradores de clinica
-create table
-    personas (
-        id_persona int AUTO_INCREMENT PRIMARY key,
-        nombre1 varchar(50),
-        nombre2 varchar(50),
-        apellido1 varchar(50),
-        apellido2 varchar(50),
-        curp varchar(20),
-        telefono varchar(10),
-        fecha_nacimiento date,
-        sexo char, -- cambiar a entidad catálogo
-        correo varchar(200)
+-- ******************************************** APPLICATION USER SCHEMAS (End-users) *******************************
+-- Clinic administrators tables
+CREATE TABLE
+    people (
+        curp VARCHAR(20) PRIMARY KEY,
+        first_name VARCHAR(50),
+        second_name VARCHAR(50),
+        first_lastname VARCHAR(50),
+        second_lastname VARCHAR(50),
+        phone VARCHAR(10),
+        birth_date DATE,
+        email VARCHAR(200),
+        fk_gender INT,
+        FOREIGN KEY (fk_gender) REFERENCES gender(id_gender) ON DELETE CASCADE ON UPDATE CASCADE
     );
 
-create table
-    administradores (
-        id_administrador int not null auto_increment primary key,
-        numero_trabajador varchar(15),
-        email_admin varchar(100) not NULL,
-        fk_persona int,
-        fk_usuario int,
-        foreign key (fk_persona) references personas (id_persona),
-        foreign key (fk_usuario) references usuarios (id_usuario)
+CREATE TABLE
+    administrators (
+        employee_number VARCHAR(15) PRIMARY KEY,
+        fk_person INT,
+        fk_user INT,
+        FOREIGN KEY (fk_person) REFERENCES people (id_person),
+        FOREIGN KEY (fk_user) REFERENCES users (id_user)
     );
 
--- ************************datos de personal de salud***********************************
-create table
-    catedraticos (
-        id_catedratico int not null auto_increment primary key,
-        numero_trabajador varchar(15),
-        email_catedratico varchar(100) not NULL,
-        fk_usuario int,
-        fk_persona int,
-        foreign key (fk_persona) references personas (id_persona),
-        fk_id_usuario int not null,
-        FOREIGN KEY (fk_id_usuario) references usuarios (id_usuario)
+-- ************************Health personnel data***********************************
+CREATE TABLE
+    lecturers (
+        employee_number VARCHAR(15) PRIMARY KEY,
+        fk_user INT,
+        fk_person INT,
+        FOREIGN KEY (fk_person) REFERENCES people (id_person),
+        fk_user INT NOT NULL,
+        FOREIGN KEY (fk_user) REFERENCES users (id_user)
     );
 
-create table
-    semestres (
-        id_semestre int AUTO_INCREMENT PRIMARY KEY,
-        fk_grupo int,
-        fk_ciclo int,
-        foreign key (fk_grupo) references grupos (id_grupo),
-        foreign key (fk_ciclo) references ciclos (id_ciclo)
+CREATE TABLE
+    semesters (
+        id_semester INT AUTO_INCREMENT PRIMARY KEY,
+        fk_group INT,
+        fk_cycle INT,
+        FOREIGN KEY (fk_group) REFERENCES groups (id_group),
+        FOREIGN KEY (fk_cycle) REFERENCES cycles (id_cycle)
     );
 
-create table
-    catedratico_grupo (
-        id_catedratico_semestre_grupo int not null auto_increment primary key,
-        fk_catedratico int,
-        fk_semestre int,
-        FOREIGN KEY (fk_catedratico) references catedraticos (id_catedratico),
-        FOREIGN KEY (fk_semestre) references semestres (id_semestre)
+CREATE TABLE
+    lecturer_group (
+        id_lecturer_semester_group INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+        fk_lecturer INT,
+        fk_semester INT,
+        FOREIGN KEY (fk_lecturer) REFERENCES lecturers (id_lecturer),
+        FOREIGN KEY (fk_semester) REFERENCES semesters (id_semester)
     );
 
-create table
-    alumnos (
-        id_alumno int not null auto_increment primary key,
-        fk_id_semestre_grupo int,
-        matricula varchar(10),
-        fk_usuario int,
-        fk_persona int,
-        foreign key (fk_persona) references personas (id_persona),
-        FOREIGN KEY (fk_usuario) references usuarios (id_usuario)
+CREATE TABLE
+    students (
+        enrollment VARCHAR(10) PRIMARY KEY,
+        fk_user INT,
+        fk_person INT,
+        FOREIGN KEY (fk_person) REFERENCES people (id_person),
+        FOREIGN KEY (fk_user) REFERENCES users (id_user)
     );
 
-create table
-    alumno_semestre (
-        id_alumno_semestre int,
-        fk_alumno int,
-        fk_semestre int,
-        FOREIGN KEY (fk_alumno) references alumnos (id_alumno),
-        FOREIGN KEY (fk_semestre) references semestres (id_semestre)
+CREATE TABLE
+    students_semesters (
+        fk_student INT,
+        fk_semester INT,
+        FOREIGN KEY (fk_student) REFERENCES students (id_student),
+        FOREIGN KEY (fk_semester) REFERENCES semesters (id_semester),
+            PRIMARY KEY (fk_student, fk_semester)
+
     );
