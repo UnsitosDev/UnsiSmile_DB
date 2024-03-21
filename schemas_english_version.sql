@@ -7,13 +7,56 @@ CREATE DATABASE IF NOT EXISTS unsis_smile;
 -- Use the database
 USE unsis_smile;
 
--- Create the Address table
-CREATE TABLE
-    addresses (
-        id_address BIGINT AUTO_INCREMENT PRIMARY KEY,
-        street VARCHAR(100),
-        neighborhood VARCHAR(100)
-    );
+CREATE TABLE states (
+    id_state varchar(2) PRIMARY KEY,
+    name VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE municipalities (
+    id_municipality varchar(4) PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    fk_state varchar(2),
+        FOREIGN KEY (fk_state) REFERENCES states (id_state) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE localities ( -- comunidad
+    id_locality varchar(5) PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    postal_code varchar(5),
+    fk_municipality varchar(4),
+        FOREIGN KEY (fk_municipality) REFERENCES municipalities (id_municipality) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+
+CREATE TABLE neighborhoods (
+    id_neighborhood int PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    fk_locality varchar(6),
+        FOREIGN KEY (fk_locality) REFERENCES localities (id_locality) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE streets (
+    id_street int PRIMARY KEY,
+    name VARCHAR(50) NOT NULL,
+    fk_neighborhood int,
+        FOREIGN KEY (fk_neighborhood) REFERENCES neighborhoods (id_neighborhood) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+-- Housing Catalog Table
+CREATE TABLE housings(
+    id_housing VARCHAR(2) PRIMARY key,
+    category TEXT
+);
+
+CREATE TABLE addresses (
+    id_address BIGINT auto_increment not null PRIMARY KEY,
+    street_number TEXT,
+    interior_number TEXT,
+    fk_housing VARCHAR(2),
+    fk_street int,
+        FOREIGN KEY (fk_housing) REFERENCES housings (id_housing) ON DELETE CASCADE ON UPDATE CASCADE,
+        FOREIGN KEY (fk_street) REFERENCES streets (id_street) ON DELETE CASCADE ON UPDATE CASCADE
+);
 
 -- Create the Guardians table
 CREATE TABLE
@@ -100,7 +143,7 @@ CREATE TABLE
         is_minor BOOLEAN,
         FK_guardian BIGINT,
         has_disability BOOLEAN,
-        FOREIGN KEY (FK_address) REFERENCES addresses (id_address) ON DELETE CASCADE ON UPDATE CASCADE,
+        FOREIGN KEY (FK_address) REFERENCES addresses(id_address) ON DELETE CASCADE ON UPDATE CASCADE,
         FOREIGN KEY (FK_gender) REFERENCES genders (id_gender),
         FOREIGN KEY (FK_marital_status) REFERENCES marital_statuses (id_marital_status),
         FOREIGN KEY (FK_occupation) REFERENCES occupations (id_occupation),
