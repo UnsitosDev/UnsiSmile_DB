@@ -54,8 +54,8 @@ CREATE TABLE
 CREATE TABLE
     addresses (
         id_address BIGINT auto_increment not null PRIMARY KEY,
-        street_number TEXT,
-        interior_number TEXT,
+        street_number VARCHAR(3),
+        interior_number VARCHAR(3),
         fk_housing VARCHAR(2),
         fk_street BIGINT,
         FOREIGN KEY (fk_housing) REFERENCES housings (id_housing) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -152,11 +152,10 @@ CREATE TABLE
         fk_ethnic_group BIGINT,
         fk_religion BIGINT,
         admission_date DATE,
-        phone VARCHAR(20),
         is_minor BOOLEAN,
         fk_guardian BIGINT,
         has_disability BOOLEAN,
-        FOREIGN KEY (fk_person) REFERENCES people (curp),
+        FOREIGN KEY (fk_person) REFERENCES people (curp) ON DELETE CASCADE ON UPDATE CASCADE,
         FOREIGN KEY (fk_address) REFERENCES addresses (id_address) ON DELETE CASCADE ON UPDATE CASCADE,
         FOREIGN KEY (fk_marital_status) REFERENCES marital_statuses (id_marital_status),
         FOREIGN KEY (fk_occupation) REFERENCES occupations (id_occupation),
@@ -193,16 +192,7 @@ CREATE TABLE
 CREATE TABLE
     FamilyHistoryQuestions (
         id_question BIGINT AUTO_INCREMENT PRIMARY KEY,
-        question ENUM (
-            'Neoplasia (Cáncer)',
-            'Diabetes',
-            'Hipertensión Arterial',
-            'Padecimientos mentales/neurológicos',
-            'Obesidad',
-            'Padecimientos hematológicos',
-            'Malformaciones congénitas',
-            'Problemas cardiacos'
-        ) NOT NULL
+        question
     );
 
 INSERT into
