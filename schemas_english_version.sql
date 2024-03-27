@@ -7,56 +7,60 @@ CREATE DATABASE IF NOT EXISTS unsis_smile;
 -- Use the database
 USE unsis_smile;
 
-CREATE TABLE states (
-    id_state varchar(2) PRIMARY KEY,
-    name VARCHAR(50) NOT NULL
-);
 
-CREATE TABLE municipalities (
-    id_municipality varchar(4) PRIMARY KEY,
-    name VARCHAR(50) NOT NULL,
-    fk_state varchar(2),
+CREATE TABLE
+    states (
+        id_state varchar(2) PRIMARY KEY,
+        name VARCHAR(50) NOT NULL
+    );
+
+CREATE TABLE
+    municipalities (
+        id_municipality varchar(4) PRIMARY KEY,
+        name VARCHAR(50) NOT NULL,
+        fk_state varchar(2),
         FOREIGN KEY (fk_state) REFERENCES states (id_state) ON DELETE CASCADE ON UPDATE CASCADE
-);
+    );
 
-CREATE TABLE localities ( -- comunidad
-    id_locality varchar(5) PRIMARY KEY,
-    name VARCHAR(50) NOT NULL,
-    postal_code varchar(5),
-    fk_municipality varchar(4),
+CREATE TABLE
+    localities ( -- comunidad
+        id_locality varchar(5) PRIMARY KEY,
+        name VARCHAR(50) NOT NULL,
+        postal_code varchar(5),
+        fk_municipality varchar(4),
         FOREIGN KEY (fk_municipality) REFERENCES municipalities (id_municipality) ON DELETE CASCADE ON UPDATE CASCADE
-);
+    );
 
-
-CREATE TABLE neighborhoods (
-    id_neighborhood int PRIMARY KEY,
-    name VARCHAR(50) NOT NULL,
-    fk_locality varchar(6),
+CREATE TABLE
+    neighborhoods ( -- colonias 
+        id_neighborhood BIGINT PRIMARY KEY,
+        name VARCHAR(50) NOT NULL,
+        fk_locality varchar(6),
         FOREIGN KEY (fk_locality) REFERENCES localities (id_locality) ON DELETE CASCADE ON UPDATE CASCADE
-);
+    );
 
-CREATE TABLE streets (
-    id_street int PRIMARY KEY,
-    name VARCHAR(50) NOT NULL,
-    fk_neighborhood int,
+CREATE TABLE
+    streets (
+        id_street BIGINT PRIMARY KEY,
+        name VARCHAR(50) NOT NULL,
+        fk_neighborhood BIGINT,
         FOREIGN KEY (fk_neighborhood) REFERENCES neighborhoods (id_neighborhood) ON DELETE CASCADE ON UPDATE CASCADE
-);
+    );
 
 -- Housing Catalog Table
-CREATE TABLE housings(
-    id_housing VARCHAR(2) PRIMARY key,
-    category TEXT
-);
+CREATE TABLE
+    housings (id_housing VARCHAR(2) PRIMARY key, category TEXT);
 
-CREATE TABLE addresses (
-    id_address BIGINT auto_increment not null PRIMARY KEY,
-    street_number TEXT,
-    interior_number TEXT,
-    fk_housing VARCHAR(2),
-    fk_street int,
+CREATE TABLE
+    addresses (
+        id_address BIGINT auto_increment not null PRIMARY KEY,
+        street_number TEXT,
+        interior_number TEXT,
+        fk_housing VARCHAR(2),
+        fk_street BIGINT,
         FOREIGN KEY (fk_housing) REFERENCES housings (id_housing) ON DELETE CASCADE ON UPDATE CASCADE,
         FOREIGN KEY (fk_street) REFERENCES streets (id_street) ON DELETE CASCADE ON UPDATE CASCADE
-);
+    );
 
 -- Create the Guardians table
 CREATE TABLE
@@ -109,7 +113,7 @@ CREATE TABLE
 
 CREATE TABLE
     vital_signs (
-        id_vital_signs INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+        id_vital_signs BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
         weight FLOAT,
         height FLOAT,
         temperature FLOAT,
@@ -121,48 +125,57 @@ CREATE TABLE
         pulse FLOAT
     );
 
+-- create the People table
+CREATE TABLE
+    people (
+        curp VARCHAR(20) PRIMARY KEY,
+        first_name VARCHAR(50),
+        second_name VARCHAR(50),
+        first_lastname VARCHAR(50),
+        second_lastname VARCHAR(50),
+        phone VARCHAR(10),
+        birth_date DATE,
+        email VARCHAR(200),
+        fk_gender BIGINT,
+        FOREIGN KEY (fk_gender) REFERENCES genders(id_gender) ON DELETE CASCADE ON UPDATE CASCADE
+    );
+
 -- Create the Patients table
 CREATE TABLE
     patients (
         id_patient BIGINT AUTO_INCREMENT PRIMARY KEY,
-        first_name VARCHAR(50),
-        middle_name VARCHAR(50),
-        last_name VARCHAR(50),
-        second_last_name VARCHAR(50),
-        date_of_birth DATE,
-        email VARCHAR(200),
-        FK_address BIGINT,
-        FK_gender BIGINT,
-        FK_marital_status BIGINT,
-        FK_occupation BIGINT,
+        fk_nationality BIGINT,
+        fk_person VARCHAR(20) not null,
+        fk_address BIGINT,
+        fk_marital_status BIGINT,
+        fk_occupation BIGINT,
         fk_ethnic_group BIGINT,
-        FK_religion BIGINT,
-        FK_nationality BIGINT,
+        fk_religion BIGINT,
         admission_date DATE,
         phone VARCHAR(20),
         is_minor BOOLEAN,
-        FK_guardian BIGINT,
+        fk_guardian BIGINT,
         has_disability BOOLEAN,
-        FOREIGN KEY (FK_address) REFERENCES addresses(id_address) ON DELETE CASCADE ON UPDATE CASCADE,
-        FOREIGN KEY (FK_gender) REFERENCES genders (id_gender),
-        FOREIGN KEY (FK_marital_status) REFERENCES marital_statuses (id_marital_status),
-        FOREIGN KEY (FK_occupation) REFERENCES occupations (id_occupation),
+        FOREIGN KEY (fk_person) REFERENCES people (curp),
+        FOREIGN KEY (fk_address) REFERENCES addresses (id_address) ON DELETE CASCADE ON UPDATE CASCADE,
+        FOREIGN KEY (fk_marital_status) REFERENCES marital_statuses (id_marital_status),
+        FOREIGN KEY (fk_occupation) REFERENCES occupations (id_occupation),
         FOREIGN KEY (fk_ethnic_group) REFERENCES ethnic_groups (id_ethnic_group),
-        FOREIGN KEY (FK_religion) REFERENCES religions (id_religion),
-        FOREIGN KEY (FK_nationality) REFERENCES nationalities (id_nationality),
-        FOREIGN KEY (FK_guardian) REFERENCES guardians (id_guardian) ON DELETE CASCADE ON UPDATE CASCADE
+        FOREIGN KEY (fk_religion) REFERENCES religions (id_religion),
+        FOREIGN KEY (fk_nationality) REFERENCES nationalities (id_nationality),
+        FOREIGN KEY (fk_guardian) REFERENCES guardians (id_guardian) ON DELETE CASCADE ON UPDATE CASCADE
     );
 
 -- START OF GENERAL MEDICAL HISTORY SCHEMAS
 CREATE TABLE
     facial_profile (
-        id_facial_profile INT AUTO_INCREMENT PRIMARY KEY,
+        id_facial_profile BIGINT AUTO_INCREMENT PRIMARY KEY,
         facial_profile VARCHAR(50)
     );
 
 CREATE TABLE
     facial_front (
-        id_facial_front INT AUTO_INCREMENT PRIMARY KEY,
+        id_facial_front BIGINT AUTO_INCREMENT PRIMARY KEY,
         facial_front VARCHAR(50)
     );
 
@@ -170,8 +183,8 @@ CREATE TABLE
 CREATE TABLE
     facial_exam (
         id_facial_exam BIGINT PRIMARY KEY AUTO_INCREMENT,
-        fk_profile INT,
-        fk_front INT,
+        fk_profile BIGINT,
+        fk_front BIGINT,
         distinguishing_features TEXT,
         FOREIGN KEY (fk_profile) REFERENCES facial_profile (id_facial_profile),
         FOREIGN KEY (fk_front) REFERENCES facial_front (id_facial_front)
@@ -181,7 +194,7 @@ CREATE TABLE
     FamilyHistoryQuestions (
         id_question BIGINT AUTO_INCREMENT PRIMARY KEY,
         question ENUM (
-                       'Neoplasia (Cáncer)',
+            'Neoplasia (Cáncer)',
             'Diabetes',
             'Hipertensión Arterial',
             'Padecimientos mentales/neurológicos',
@@ -192,7 +205,7 @@ CREATE TABLE
         ) NOT NULL
     );
 
-INSERT INTO
+INSERT into
     FamilyHistoryQuestions (question)
 VALUES
     ('Neoplasia (Cáncer)'),
@@ -228,9 +241,9 @@ CREATE TABLE
         eats_junk_food BOOLEAN,
         drinks_water_daily BOOLEAN,
         drinks_sodas BOOLEAN,
-        daily_sleep_hours INT,
-        times_bathes_per_week INT,
-        times_brushes_teeth_per_day INT,
+        daily_sleep_hours BIGINT,
+        times_bathes_per_week BIGINT,
+        times_brushes_teeth_per_day BIGINT,
         house_with_floor BOOLEAN,
         fk_housing_material BIGINT,
         FOREIGN KEY (fk_housing_material) REFERENCES housing_material (housing_material_ID) ON DELETE CASCADE ON UPDATE CASCADE
@@ -240,7 +253,7 @@ CREATE TABLE
     ClosedQuestionsPathologicalAntecedents (
         id_closed_question BIGINT AUTO_INCREMENT PRIMARY KEY,
         question ENUM (
-                        'Tabaquismo',
+            'Tabaquismo',
             'Alcoholismo',
             'Otras sustancias psicoactivas o recreativas',
             'Perforaciones (Aretes, en mujeres además de los 2 aretes en cada oreja)',
@@ -265,7 +278,7 @@ CREATE TABLE
             'Trasplantes de órganos',
             'Hipertensión Arterial',
             'Padecimientos mentales/convulsiones/desmayos/migraña/neuralgia'
-            ) NOT NULL
+        ) NOT NULL
     );
 
 INSERT INTO
@@ -306,7 +319,8 @@ VALUES
     ('Trasplantes de órganos'),
     ('Hipertensión Arterial'),
     (
-        'Padecimientos mentales/convulsiones/desmayos/migraña/neuralgia');
+        'Padecimientos mentales/convulsiones/desmayos/migraña/neuralgia'
+    );
 
 CREATE TABLE
     OpenQuestionsPathologicalAntecedents (
@@ -346,37 +360,37 @@ VALUES
 -- Odontogram schemas
 CREATE TABLE
     odontogram (
-        id_odontogram INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+        id_odontogram BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
         description TEXT,
         date DATE
     );
 
 CREATE TABLE
     dental_code (
-        id_dental_code INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+        id_dental_code BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
         code VARCHAR(3),
         adult BOOLEAN
     );
 
 CREATE TABLE
     tooth_condition (
-        id_tooth_condition INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+        id_tooth_condition BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
         description VARCHAR(50)
     );
 
 CREATE TABLE
     tooth_region (
-        id_tooth_region INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+        id_tooth_region BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
         description VARCHAR(50)
     );
 
 CREATE TABLE
     tooth_detail (
-        id_tooth_detail INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-        fk_id_dental_code INT,
-        fk_tooth_condition INT,
-        fk_tooth_region INT,
-        fk_odontogram INT,
+        id_tooth_detail BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+        fk_id_dental_code BIGINT,
+        fk_tooth_condition BIGINT,
+        fk_tooth_region BIGINT,
+        fk_odontogram BIGINT,
         FOREIGN KEY (fk_id_dental_code) REFERENCES dental_code (id_dental_code),
         FOREIGN KEY (fk_tooth_condition) REFERENCES tooth_condition (id_tooth_condition),
         FOREIGN KEY (fk_odontogram) REFERENCES odontogram (id_odontogram),
@@ -387,7 +401,7 @@ CREATE TABLE
 -- periodontogram table
 CREATE TABLE
     periodontogram (
-        id_periodontogram INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+        id_periodontogram BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
         description TEXT,
         date DATE
     );
@@ -395,14 +409,14 @@ CREATE TABLE
 -- table containing the region (distal, mesial, etc)
 CREATE TABLE
     tooth_regions_periodontogram ( -- catalog entity
-        id_tooth_regions_periodontogram INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+        id_tooth_regions_periodontogram BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
         region VARCHAR(2)
     );
 
 -- schema that will contain the regions: upper vestibular, palatine, lower vestibular and lingual
 CREATE TABLE
     regions_measurement_pockets ( -- catalog entity
-        id_regions_measurement_pockets INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+        id_regions_measurement_pockets BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
         region ENUM (
             'VESTIBULARES SUPERIORES',
             'PALATINAS',
@@ -418,14 +432,14 @@ VALUES
     ('PALATINAS'),
     ('VESTIBULARES INFERIORES'),
     ('LINGUALES');
-    
+
 CREATE TABLE
     pocket_measurement_detail ( -- table that will contain the pocket measurement of a particular tooth
-        id_pocket_measurement_detail INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-        fk_tooth_regions_periodontogram INT,
-        fk_dental_code INT,
-        fk_regions_measurement_pockets INT,
-        fk_periodontogram INT,
+        id_pocket_measurement_detail BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+        fk_tooth_regions_periodontogram BIGINT,
+        fk_dental_code BIGINT,
+        fk_regions_measurement_pockets BIGINT,
+        fk_periodontogram BIGINT,
         measurement FLOAT,
         FOREIGN KEY (fk_tooth_regions_periodontogram) REFERENCES tooth_regions_periodontogram (id_tooth_regions_periodontogram),
         FOREIGN KEY (fk_dental_code) REFERENCES dental_code (id_dental_code),
@@ -442,8 +456,8 @@ CREATE TABLE
         fk_facial_exam BIGINT,
         fk_family_history BIGINT,
         fk_non_pathological_personal_antecedents BIGINT,
-        fk_initial_odontogram INT,
-        fk_final_odontogram INT,
+        fk_initial_odontogram BIGINT,
+        fk_final_odontogram BIGINT,
         FOREIGN KEY (fk_facial_exam) REFERENCES facial_exam (id_facial_exam) ON DELETE CASCADE ON UPDATE CASCADE,
         FOREIGN KEY (fk_family_history) REFERENCES FamilyHistory (id_family_history) ON DELETE CASCADE ON UPDATE CASCADE,
         FOREIGN KEY (fk_patient) REFERENCES patients (id_patient) ON DELETE CASCADE ON UPDATE CASCADE,

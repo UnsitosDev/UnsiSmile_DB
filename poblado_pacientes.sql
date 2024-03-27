@@ -80,9 +80,16 @@ INSERT INTO nationalities (id_nationality, nationality) VALUES
 (2, 'Británico'),
 (3, 'Francés');
 
+-- Insertar datos en la tabla people
+INSERT INTO people (
+    curp, first_name, second_name, first_lastname, second_lastname, phone, birth_date, email, fk_gender
+) VALUES 
+('AAA123456BBBCCCDD', 'Ana', 'María', 'González', 'López', '5551234567', '1990-05-15', 'ana.gonzalez@example.com', 1),
+('BBB987654CCCDDDEE', 'Carlos', 'Antonio', 'Rodríguez', 'Díaz', '5559876543', '1985-08-20', 'carlos.rodriguez@example.com', 2);
+
 -- Insertar datos en la tabla patients
 INSERT INTO patients (
-    first_name, middle_name, last_name, second_last_name, date_of_birth, email, FK_address, FK_gender, FK_marital_status, FK_occupation, fk_ethnic_group, FK_religion, FK_nationality, admission_date, phone, is_minor, FK_guardian, has_disability
+    fk_nationality, fk_person, fk_address, fk_marital_status, fk_occupation, fk_ethnic_group, fk_religion, admission_date, phone, is_minor, fk_guardian, has_disability
 ) VALUES 
-('Ana', 'María', 'González', 'López', '1990-05-15', 'ana.gonzalez@example.com', 1, 1, 2, 3, 1, 1, 1, '2024-03-15', '555-1111', false, 1, false),
-('Carlos', 'Antonio', 'Rodríguez', 'Díaz', '1985-08-20', 'carlos.rodriguez@example.com', 2, 2, 1, 2, 2, 2, 2, '2024-03-16', '555-2222', false, 2, true);
+(1, 'AAA123456BBBCCCDD', 1, 2, 3, 1, 1, '2024-03-15', '555-1111', false, 1, false),
+(2, 'BBB987654CCCDDDEE', 2, 1, 2, 2, 2, '2024-03-16', '555-2222', false, 2, true);
