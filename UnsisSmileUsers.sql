@@ -2,8 +2,9 @@
 CREATE TABLE patients (
     curp VARCHAR(20) UNIQUE PRIMARY KEY,
     first_name TEXT,
-    last_name TEXT,
-    paternal_last_name TEXT,
+    second_name Text,
+    first_lastname Text,
+    second_lastname TEXT,
     socioeconomic_level TEXT,
     phone_1 VARCHAR(15),
     phone_2 VARCHAR(15),
