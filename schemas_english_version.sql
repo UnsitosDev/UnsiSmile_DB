@@ -190,31 +190,11 @@ CREATE TABLE
     );
 
 CREATE TABLE
-    FamilyHistoryQuestions (
+    HereditaryFamilyHistoryQuestions (
         id_question BIGINT AUTO_INCREMENT PRIMARY KEY,
-        question
+        question VARCHAR(100)
     );
 
-INSERT into
-    FamilyHistoryQuestions (question)
-VALUES
-    ('Neoplasia (Cáncer)'),
-    ('Diabetes'),
-    ('Hipertensión Arterial'),
-    ('Padecimientos mentales/neurológicos'),
-    ('Obesidad'),
-    ('Padecimientos hematológicos'),
-    ('Malformaciones congénitas'),
-    ('Problemas cardiacos');
-
-CREATE TABLE
-    FamilyHistory (
-        id_family_history BIGINT PRIMARY KEY AUTO_INCREMENT,
-        fk_question BIGINT,
-        main_response ENUM ('si', 'no') NOT NULL,
-        response_detail TEXT,
-        FOREIGN KEY (fk_question) REFERENCES FamilyHistoryQuestions (id_question) ON DELETE CASCADE ON UPDATE CASCADE
-    );
 
 CREATE TABLE
     housing_material (
@@ -242,118 +222,23 @@ CREATE TABLE
 CREATE TABLE
     ClosedQuestionsPathologicalAntecedents (
         id_closed_question BIGINT AUTO_INCREMENT PRIMARY KEY,
-        question ENUM (
-            'Tabaquismo',
-            'Alcoholismo',
-            'Otras sustancias psicoactivas o recreativas',
-            'Perforaciones (Aretes, en mujeres además de los 2 aretes en cada oreja)',
-            'Tatuajes',
-            'Neoplasia (Cáncer)',
-            'Diabetes',
-            'Obesidad diagnosticada',
-            'Padecimientos hematológicos/hemorrágicos/anemia/leucemia',
-            'Malformaciones congénitas/Síndromes',
-            'Problemas cardiacos/angina de pecho/infarto/tromboembolia/marcapasos/bypass',
-            'Radioterapia/Quimioterapia',
-            'Padecimientos reumatológicos/artritis/osteoporosis',
-            'Enfermedades del riñón',
-            'Enfermedades hepáticas/Hepatitis',
-            'Enfermedades de transmisión sexual',
-            'Hipertiroidismo/Hipotiroidismo',
-            'Enfermedades de vías aéreas/asma',
-            'Problemas oculares',
-            'Enfermedades digestivas',
-            'Tuberculosis o vive con persona(s) con este padecimiento',
-            'Enfermedades de la piel',
-            'Trasplantes de órganos',
-            'Hipertensión Arterial',
-            'Padecimientos mentales/convulsiones/desmayos/migraña/neuralgia'
-        ) NOT NULL
+        question VARCHAR(500)
     );
 
-INSERT INTO
-    ClosedQuestionsPathologicalAntecedents (question)
-VALUES
-    ('Tabaquismo'),
-    ('Alcoholismo'),
-    ('Otras sustancias psicoactivas o recreativas'),
-    (
-        'Perforaciones (Aretes, en mujeres además de los 2 aretes en cada oreja)'
-    ),
-    ('Tatuajes'),
-    ('Neoplasia (Cáncer)'),
-    ('Diabetes'),
-    ('Obesidad diagnosticada'),
-    (
-        'Padecimientos hematológicos/hemorrágicos/anemia/leucemia'
-    ),
-    ('Malformaciones congénitas/Síndromes'),
-    (
-        'Problemas cardiacos/angina de pecho/infarto/tromboembolia/marcapasos/bypass'
-    ),
-    ('Radioterapia/Quimioterapia'),
-    (
-        'Padecimientos reumatológicos/artritis/osteoporosis'
-    ),
-    ('Enfermedades del riñón'),
-    ('Enfermedades hepáticas/Hepatitis'),
-    ('Enfermedades de transmisión sexual'),
-    ('Hipertiroidismo/Hipotiroidismo'),
-    ('Enfermedades de vías aéreas/asma'),
-    ('Problemas oculares'),
-    ('Enfermedades digestivas'),
-    (
-        'Tuberculosis o vive con persona(s) con este padecimiento'
-    ),
-    ('Enfermedades de la piel'),
-    ('Trasplantes de órganos'),
-    ('Hipertensión Arterial'),
-    (
-        'Padecimientos mentales/convulsiones/desmayos/migraña/neuralgia'
-    );
 
 CREATE TABLE
     OpenQuestionsPathologicalAntecedents (
         id_open_question BIGINT AUTO_INCREMENT PRIMARY KEY,
-        question ENUM (
-            '¿Has sido hospitalizado? (en mujeres también anotar datos de parto)',
-            'Motivo de la hospitalización',
-            '¿Ha tomado algún medicamento recientemente?',
-            '¿Cuál es el motivo?',
-            '¿Ha tenido algún problema con la anestesia dental o anestesia general?',
-            '¿Cuál es el problema?',
-            '¿Es alérgico/a a algún medicamento o sustancia?',
-            '¿Cuál es la sustancia a la que es alérgico/a?',
-            '(Solo para mujeres) ¿Está embarazada?',
-            'Meses de embarazo'
-        )
+        question VARCHAR(300)
     );
-
-INSERT INTO
-    OpenQuestionsPathologicalAntecedents (question)
-VALUES
-    (
-        '¿Has sido hospitalizado? (en mujeres también anotar datos de parto)'
-    ),
-    ('Motivo de la hospitalización'),
-    ('¿Ha tomado algún medicamento recientemente?'),
-    ('¿Cuál es el motivo?'),
-    (
-        '¿Ha tenido algún problema con la anestesia dental o anestesia general?'
-    ),
-    ('¿Cuál es el problema?'),
-    ('¿Es alérgico/a a algún medicamento o sustancia?'),
-    ('¿Cuál es la sustancia a la que es alérgico/a?'),
-    ('(Solo para mujeres) ¿Está embarazada?'),
-    ('Meses de embarazo');
 
 -- Odontogram schemas
 CREATE TABLE
-    odontogram (
-        id_odontogram BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-        description TEXT,
-        date DATE
-    );
+        odontogram (
+            id_odontogram BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            description TEXT,
+            date DATE
+        );
 
 CREATE TABLE
     dental_code (
@@ -407,21 +292,9 @@ CREATE TABLE
 CREATE TABLE
     regions_measurement_pockets ( -- catalog entity
         id_regions_measurement_pockets BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-        region ENUM (
-            'VESTIBULARES SUPERIORES',
-            'PALATINAS',
-            'VESTIBULARES INFERIORES',
-            'LINGUALES'
-        )
+        region varchar(100)
     );
 
-INSERT INTO
-    regions_measurement_pockets (region)
-VALUES
-    ('VESTIBULARES SUPERIORES'),
-    ('PALATINAS'),
-    ('VESTIBULARES INFERIORES'),
-    ('LINGUALES');
 
 CREATE TABLE
     pocket_measurement_detail ( -- table that will contain the pocket measurement of a particular tooth
@@ -449,17 +322,28 @@ CREATE TABLE
         fk_initial_odontogram BIGINT,
         fk_final_odontogram BIGINT,
         FOREIGN KEY (fk_facial_exam) REFERENCES facial_exam (id_facial_exam) ON DELETE CASCADE ON UPDATE CASCADE,
-        FOREIGN KEY (fk_family_history) REFERENCES FamilyHistory (id_family_history) ON DELETE CASCADE ON UPDATE CASCADE,
         FOREIGN KEY (fk_patient) REFERENCES patients (id_patient) ON DELETE CASCADE ON UPDATE CASCADE,
         FOREIGN KEY (fk_non_pathological_personal_antecedents) REFERENCES NonPathologicalPersonalAntecedents (id_non_pathological_personal_antecedents) ON DELETE CASCADE ON UPDATE CASCADE,
         FOREIGN KEY (fk_initial_odontogram) REFERENCES odontogram (id_odontogram),
         FOREIGN KEY (fk_final_odontogram) REFERENCES odontogram (id_odontogram)
     );
 
+
+CREATE TABLE
+    HereditaryFamilyHistory (
+        id_family_history BIGINT PRIMARY KEY AUTO_INCREMENT,
+        fk_question BIGINT,
+        fk_medical_history BIGINT,
+        main_response ENUM ('si', 'no') NOT NULL,
+        response_detail TEXT,
+        FOREIGN KEY (fk_question) REFERENCES HereditaryFamilyHistoryQuestions (id_question) ON DELETE CASCADE ON UPDATE CASCADE,
+        FOREIGN KEY (fk_medical_history) REFERENCES  medical_histories (id_medical_history)
+    );
+
 -- Section for non-pathological personal antecedents questions
 CREATE TABLE
-    ClosedAnswersNonPathological (
-        id_closed_answer_non_pathological BIGINT AUTO_INCREMENT PRIMARY KEY,
+    ClosedAnswersPathological ( -- este es de patologicos
+        id_closed_answer_pathological BIGINT AUTO_INCREMENT PRIMARY KEY,
         fk_closed_questions_id BIGINT,
         fk_medical_histories BIGINT,
         answer TEXT,
@@ -468,8 +352,8 @@ CREATE TABLE
     );
 
 CREATE TABLE
-    OpenAnswersNonPathological (
-        id_open_answer_non_pathological BIGINT AUTO_INCREMENT PRIMARY KEY,
+    OpenAnswersPathological ( -- este tambien xd
+        id_open_answer_pathological BIGINT AUTO_INCREMENT PRIMARY KEY,
         fk_open_questions_id BIGINT,
         fk_medical_histories BIGINT,
         answer TEXT,
