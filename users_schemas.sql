@@ -118,5 +118,4 @@ CREATE TABLE
         FOREIGN KEY (fk_student) REFERENCES students (id_student),
         FOREIGN KEY (fk_semester) REFERENCES semesters (id_semester),
             PRIMARY KEY (fk_student, fk_semester)
-
     );

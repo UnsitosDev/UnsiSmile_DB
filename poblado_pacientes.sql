@@ -29,8 +29,9 @@ INSERT INTO facial_front(facial_front) VALUES
 ('Dolicofacial');
 
 
+
 INSERT into
-    HereditaryFamilyHistoryQuestions (question)
+    hereditary_family_history_questions(question)
 VALUES
     ('Neoplasia (Cáncer)'),
     ('Diabetes'),
@@ -43,7 +44,7 @@ VALUES
 
 
 INSERT INTO
-    ClosedQuestionsPathologicalAntecedents (question)
+    closed_questions_pathological_antecedents (question)
 VALUES
     ('Tabaquismo'),
     ('Alcoholismo'),
@@ -85,7 +86,7 @@ VALUES
 
 
 INSERT INTO
-    OpenQuestionsPathologicalAntecedents (question)
+    open_questions_pathological_antecedents (question)
 VALUES
     (
         '¿Has sido hospitalizado? (en mujeres también anotar datos de parto)'
@@ -101,6 +102,7 @@ VALUES
     ('¿Cuál es la sustancia a la que es alérgico/a?'),
     ('(Solo para mujeres) ¿Está embarazada?'),
     ('Meses de embarazo');
+
 
 
 
