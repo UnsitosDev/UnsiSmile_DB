@@ -436,6 +436,12 @@ FOREIGN KEY(fk_id_periodontograma) references periodontograma(id_periodontograma
 );
 
 
+create table grado_escolar(
+id_grado_escolar int not null auto_increment primary key,
+grado_escolar varchar(100);
+);
+
+
 
 -- fin tabla medicion de bolsas inicial
 

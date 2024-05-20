@@ -7,7 +7,6 @@ CREATE DATABASE IF NOT EXISTS unsis_smile;
 -- Use the database
 USE unsis_smile;
 
-
 CREATE TABLE
     states (
         id_state varchar(2) PRIMARY KEY,
@@ -137,7 +136,7 @@ CREATE TABLE
         birth_date DATE,
         email VARCHAR(200),
         fk_gender BIGINT,
-        FOREIGN KEY (fk_gender) REFERENCES genders(id_gender) ON DELETE CASCADE ON UPDATE CASCADE
+        FOREIGN KEY (fk_gender) REFERENCES genders (id_gender) ON DELETE CASCADE ON UPDATE CASCADE
     );
 
 -- Create the Patients table
@@ -163,6 +162,16 @@ CREATE TABLE
         FOREIGN KEY (fk_religion) REFERENCES religions (id_religion),
         FOREIGN KEY (fk_nationality) REFERENCES nationalities (id_nationality),
         FOREIGN KEY (fk_guardian) REFERENCES guardians (id_guardian) ON DELETE CASCADE ON UPDATE CASCADE
+    );
+
+-- student pacient
+create table
+    student_pacient (
+        id_studentPatient BIGINT AUTO_INCREMENT PRIMARY KEY,
+        fk_patient BIGINT,
+        fk_student varchar(10),
+        FOREIGN KEY (fk_patient) REFERENCES patients(id_patient) ON DELETE CASCADE ON UPDATE CASCADE,
+        FOREIGN KEY (fk_student) REFERENCES patients(enrollment) ON DELETE CASCADE ON UPDATE CASCADE
     );
 
 -- START OF GENERAL MEDICAL HISTORY SCHEMAS
@@ -195,7 +204,6 @@ CREATE TABLE
         question VARCHAR(100)
     );
 
-
 CREATE TABLE
     housing_material (
         housing_material_ID BIGINT PRIMARY KEY AUTO_INCREMENT,
@@ -225,7 +233,6 @@ CREATE TABLE
         question VARCHAR(500)
     );
 
-
 CREATE TABLE
     OpenQuestionsPathologicalAntecedents (
         id_open_question BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -234,11 +241,11 @@ CREATE TABLE
 
 -- Odontogram schemas
 CREATE TABLE
-        odontogram (
-            id_odontogram BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-            description TEXT,
-            date DATE
-        );
+    odontogram (
+        id_odontogram BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+        description TEXT,
+        date DATE
+    );
 
 CREATE TABLE
     dental_code (
@@ -295,7 +302,6 @@ CREATE TABLE
         region varchar(100)
     );
 
-
 CREATE TABLE
     pocket_measurement_detail ( -- table that will contain the pocket measurement of a particular tooth
         id_pocket_measurement_detail BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -328,7 +334,6 @@ CREATE TABLE
         FOREIGN KEY (fk_final_odontogram) REFERENCES odontogram (id_odontogram)
     );
 
-
 CREATE TABLE
     HereditaryFamilyHistory (
         id_family_history BIGINT PRIMARY KEY AUTO_INCREMENT,
@@ -337,7 +342,7 @@ CREATE TABLE
         main_response ENUM ('si', 'no') NOT NULL,
         response_detail TEXT,
         FOREIGN KEY (fk_question) REFERENCES HereditaryFamilyHistoryQuestions (id_question) ON DELETE CASCADE ON UPDATE CASCADE,
-        FOREIGN KEY (fk_medical_history) REFERENCES  medical_histories (id_medical_history)
+        FOREIGN KEY (fk_medical_history) REFERENCES medical_histories (id_medical_history)
     );
 
 -- Section for non-pathological personal antecedents questions
