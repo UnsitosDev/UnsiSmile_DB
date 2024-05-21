@@ -583,7 +583,7 @@ INSERT INTO
 VALUES
     (1, 'Médico'),
     (2, 'Maestro'),
-    (3, 'Ingeniero')
+    (3, 'Ingeniero'),
     (99, 'No definido');
 
 -- Insertar datos en la tabla ethnic_groups
