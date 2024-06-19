@@ -285,19 +285,6 @@ observaciones text
 );
 
 
-create table analisis_funcional(
-id_analisis_funcional int not null auto_increment primary key,
-Deglucion text,
-Fonacion_masticacion text,
-Respiracion text,
-Observaciones text
-);
-
-
-create table postura_del_paciente(
-id_postura_del_paciente int not null auto_increment primary key,
-atm_palpacion text
-);
 
 create table examen_bucal(
 -- clasificacion de angle
@@ -306,57 +293,6 @@ Relacion_molar_Derecha text,
 Relacion_molar_Izquierda text,
 Relacion_canina_Derecha text,
 Relacion_canina_Izquierda text
-);
-
-
-create table analisis_radiografico(
-id_analisis_radiografico int not null auto_increment primary key,
-Periapical text,
-cefalica_lateral text,
-Panoramica text
-);
-
-create table modelos_de_estudio_fotografias(
-id_modelos_de_estudio_fotografias int not null auto_increment primary key,
-Modelos_de_estudio text,
-Tipo_de_arcada text,
-Fotografias text
-);
-
-
-create table estudio_de_laboratorio_biopsia(
-id_estudio_de_laboratorio_biopsia int not null auto_increment primary key,
-tipo_de_estudio text,
-tipo_de_biopsia text,
-region_donde_se_realizo_biopsia text,
-laboratorio_donde_se_envia_el_estudio text
-);
-
-
-
-create table interconsulta_medica(
-id_interconsulta_medica int not null auto_increment primary key,
-nombre_medico varchar(100),
-razon text,
-motivo_diagnostico_presuntivo text,
-motivo_de_envio text,
-servicio_al_que_se_envia text
-);
-
-create table examen_clinico(
-id_examen_clinico int not null auto_increment primary key,
-Paladar text,
-Istmo_fauces text,
-Mucosa_yugal text,
-Nodulos_linfaticos text,
-Lengua text,
-Piso_boca text,
-Labios text,
-Glandulas_salivales text,
-Encia text,
-Frenillos text,
-Saliva text,
-Otras_senias_particulares text
 );
 
 
