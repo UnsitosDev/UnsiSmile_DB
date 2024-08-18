@@ -4,6 +4,11 @@
 -- ------------------------------------------------------
 -- Server version	5.5.5-10.5.24-MariaDB-1:10.5.24+maria~ubu2004
 
+drop database if exists unsis_smile;
+create database unsis_smile;
+
+use unsis_smile;
+
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
@@ -44,6 +49,34 @@ LOCK TABLES `addresses` WRITE;
 /*!40000 ALTER TABLE `addresses` DISABLE KEYS */;
 INSERT INTO `addresses` VALUES (1,'10','10','1',3),(2,'st','st','1',1);
 /*!40000 ALTER TABLE `addresses` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `administrators`
+--
+
+DROP TABLE IF EXISTS `administrators`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `administrators` (
+  `employee_number` varchar(15) NOT NULL,
+  `fk_person` varchar(20) NOT NULL,
+  `fk_user` binary(16) NOT NULL,
+  PRIMARY KEY (`employee_number`),
+  KEY `FKjmnrfhqnt7buorudjcerj9407` (`fk_person`),
+  KEY `FKcpp242h13a6kwot6td2pa8p3r` (`fk_user`),
+  CONSTRAINT `FKcpp242h13a6kwot6td2pa8p3r` FOREIGN KEY (`fk_user`) REFERENCES `user_app` (`id`),
+  CONSTRAINT `FKjmnrfhqnt7buorudjcerj9407` FOREIGN KEY (`fk_person`) REFERENCES `people` (`curp`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `administrators`
+--
+
+LOCK TABLES `administrators` WRITE;
+/*!40000 ALTER TABLE `administrators` DISABLE KEYS */;
+/*!40000 ALTER TABLE `administrators` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -719,7 +752,14 @@ CREATE TABLE `odontogram` (
   `id_odontogram` bigint(20) NOT NULL AUTO_INCREMENT,
   `date` date NOT NULL,
   `description` text DEFAULT NULL,
-  PRIMARY KEY (`id_odontogram`)
+  `creation_date` date NOT NULL,
+  `fk_tooth` bigint(20) DEFAULT NULL,
+  `fk_tooth_condition` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`id_odontogram`),
+  KEY `FKeql1aem48mfkjgnoloxu3m33e` (`fk_tooth`),
+  KEY `FKl9lphq4do6di4p4g0tcg166jq` (`fk_tooth_condition`),
+  CONSTRAINT `FKeql1aem48mfkjgnoloxu3m33e` FOREIGN KEY (`fk_tooth`) REFERENCES `tooth` (`id_tooth`),
+  CONSTRAINT `FKl9lphq4do6di4p4g0tcg166jq` FOREIGN KEY (`fk_tooth_condition`) REFERENCES `tooth_condition` (`id_tooth_condition`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1137,7 +1177,7 @@ CREATE TABLE `students` (
 
 LOCK TABLES `students` WRITE;
 /*!40000 ALTER TABLE `students` DISABLE KEYS */;
-INSERT INTO `students` VALUES ('2019060310','FIMJ011004HOCGRLA8',_binary '�n;/\�\�K��G\'4�ν');
+INSERT INTO `students` VALUES ('2019060310','FIMJ011004HOCGRLA8',_binary '�n;/��K�');
 /*!40000 ALTER TABLE `students` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1170,6 +1210,30 @@ LOCK TABLES `students_semesters` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `tooth`
+--
+
+DROP TABLE IF EXISTS `tooth`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tooth` (
+  `id_tooth` bigint(20) NOT NULL AUTO_INCREMENT,
+  `creation_date` date NOT NULL,
+  `fk_odontogram` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`id_tooth`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tooth`
+--
+
+LOCK TABLES `tooth` WRITE;
+/*!40000 ALTER TABLE `tooth` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tooth` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `tooth_condition`
 --
 
@@ -1194,60 +1258,29 @@ INSERT INTO `tooth_condition` VALUES (1,'Diente presente'),(2,'Diente parcialmen
 UNLOCK TABLES;
 
 --
--- Table structure for table `tooth_detail`
+-- Table structure for table `tooth_face`
 --
 
-DROP TABLE IF EXISTS `tooth_detail`;
+DROP TABLE IF EXISTS `tooth_face`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `tooth_detail` (
-  `id_tooth_detail` bigint(20) NOT NULL AUTO_INCREMENT,
-  `fk_id_dental_code` bigint(20) DEFAULT NULL,
-  `fk_odontogram` bigint(20) DEFAULT NULL,
-  `fk_tooth_condition` bigint(20) DEFAULT NULL,
-  `fk_tooth_region` bigint(20) DEFAULT NULL,
-  PRIMARY KEY (`id_tooth_detail`),
-  KEY `FK6gdsgsauwv7brwlb5qpe6kfd7` (`fk_id_dental_code`),
-  KEY `FK2l970wktc05714kvdd9ux6uf6` (`fk_odontogram`),
-  KEY `FKfspep51tbboex55f5ffupt8d2` (`fk_tooth_condition`),
-  KEY `FKph36l4a5e3num9kv8plaal7h1` (`fk_tooth_region`),
-  CONSTRAINT `FK2l970wktc05714kvdd9ux6uf6` FOREIGN KEY (`fk_odontogram`) REFERENCES `odontogram` (`id_odontogram`),
-  CONSTRAINT `FK6gdsgsauwv7brwlb5qpe6kfd7` FOREIGN KEY (`fk_id_dental_code`) REFERENCES `dental_code` (`id_dental_code`),
-  CONSTRAINT `FKfspep51tbboex55f5ffupt8d2` FOREIGN KEY (`fk_tooth_condition`) REFERENCES `tooth_condition` (`id_tooth_condition`),
-  CONSTRAINT `FKph36l4a5e3num9kv8plaal7h1` FOREIGN KEY (`fk_tooth_region`) REFERENCES `tooth_region` (`id_tooth_region`)
+CREATE TABLE `tooth_face` (
+  `id_tooth_face` bigint(20) NOT NULL AUTO_INCREMENT,
+  `creation_date` date NOT NULL,
+  `fk_tooth` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`id_tooth_face`),
+  KEY `FKitfki8xb05cy5bg4ee6xkrs52` (`fk_tooth`),
+  CONSTRAINT `FKitfki8xb05cy5bg4ee6xkrs52` FOREIGN KEY (`fk_tooth`) REFERENCES `tooth` (`id_tooth`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tooth_detail`
+-- Dumping data for table `tooth_face`
 --
 
-LOCK TABLES `tooth_detail` WRITE;
-/*!40000 ALTER TABLE `tooth_detail` DISABLE KEYS */;
-/*!40000 ALTER TABLE `tooth_detail` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `tooth_region`
---
-
-DROP TABLE IF EXISTS `tooth_region`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `tooth_region` (
-  `id_tooth_region` bigint(20) NOT NULL AUTO_INCREMENT,
-  `description` varchar(50) NOT NULL,
-  PRIMARY KEY (`id_tooth_region`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `tooth_region`
---
-
-LOCK TABLES `tooth_region` WRITE;
-/*!40000 ALTER TABLE `tooth_region` DISABLE KEYS */;
-/*!40000 ALTER TABLE `tooth_region` ENABLE KEYS */;
+LOCK TABLES `tooth_face` WRITE;
+/*!40000 ALTER TABLE `tooth_face` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tooth_face` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -1299,7 +1332,7 @@ CREATE TABLE `user_app` (
 
 LOCK TABLES `user_app` WRITE;
 /*!40000 ALTER TABLE `user_app` DISABLE KEYS */;
-INSERT INTO `user_app` VALUES (_binary 'w~2��NB�\�S|\0�','$2a$10$FsfHswsodA.7t8.tJKuvgef3NR/ar3VZEXgAxEIv.kIYH19//l0kq','string',1,_binary ''),(_binary '�n;/\�\�K��G\'4�ν','$2a$10$PsXJlaqLHmD93aK6svRMruRtfMoRgoW6O6bbVjS91iedGsnRG.qdW','2019060310',2,_binary '');
+INSERT INTO `user_app` VALUES (_binary 'w~2��NB�\�','$2a$10$FsfHswsodA.7t8.tJKuvgef3NR/ar3VZEXgAxEIv.kIYH19//l0kq','string',1,_binary ''),(_binary '�n;/��K�','$2a$10$PsXJlaqLHmD93aK6svRMruRtfMoRgoW6O6bbVjS91iedGsnRG.qdW','2019060310',2,_binary '');
 /*!40000 ALTER TABLE `user_app` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1343,4 +1376,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-08-13 17:42:18
+-- Dump completed on 2024-08-17 23:06:46
