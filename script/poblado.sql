@@ -750,16 +750,9 @@ DROP TABLE IF EXISTS `odontogram`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `odontogram` (
   `id_odontogram` bigint(20) NOT NULL AUTO_INCREMENT,
-  `date` date NOT NULL,
   `description` text DEFAULT NULL,
   `creation_date` date NOT NULL,
-  `fk_tooth` bigint(20) DEFAULT NULL,
-  `fk_tooth_condition` bigint(20) DEFAULT NULL,
-  PRIMARY KEY (`id_odontogram`),
-  KEY `FKeql1aem48mfkjgnoloxu3m33e` (`fk_tooth`),
-  KEY `FKl9lphq4do6di4p4g0tcg166jq` (`fk_tooth_condition`),
-  CONSTRAINT `FKeql1aem48mfkjgnoloxu3m33e` FOREIGN KEY (`fk_tooth`) REFERENCES `tooth` (`id_tooth`),
-  CONSTRAINT `FKl9lphq4do6di4p4g0tcg166jq` FOREIGN KEY (`fk_tooth_condition`) REFERENCES `tooth_condition` (`id_tooth_condition`)
+  PRIMARY KEY (`id_odontogram`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1220,7 +1213,9 @@ CREATE TABLE `tooth` (
   `id_tooth` bigint(20) NOT NULL AUTO_INCREMENT,
   `creation_date` date NOT NULL,
   `fk_odontogram` bigint(20) DEFAULT NULL,
-  PRIMARY KEY (`id_tooth`)
+  PRIMARY KEY (`id_tooth`),
+  KEY `FKr7kcbeci7owh6t70gwe357bt0` (`fk_odontogram`),
+  CONSTRAINT `FKr7kcbeci7owh6t70gwe357bt0` FOREIGN KEY (`fk_odontogram`) REFERENCES `odontogram` (`id_odontogram`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1258,6 +1253,35 @@ INSERT INTO `tooth_condition` VALUES (1,'Diente presente'),(2,'Diente parcialmen
 UNLOCK TABLES;
 
 --
+-- Table structure for table `tooth_condition_rel`
+--
+
+DROP TABLE IF EXISTS `tooth_condition_rel`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tooth_condition_rel` (
+  `id_tooth_condition_rel` bigint(20) NOT NULL AUTO_INCREMENT,
+  `creation_date` date NOT NULL,
+  `fk_tooth` bigint(20) DEFAULT NULL,
+  `fk_tooth_condition` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`id_tooth_condition_rel`),
+  KEY `FK6gr8p596riesuube9cb3dx3av` (`fk_tooth`),
+  KEY `FK5ng6adfd4uu71jms1a70g9yhu` (`fk_tooth_condition`),
+  CONSTRAINT `FK5ng6adfd4uu71jms1a70g9yhu` FOREIGN KEY (`fk_tooth_condition`) REFERENCES `tooth_condition` (`id_tooth_condition`),
+  CONSTRAINT `FK6gr8p596riesuube9cb3dx3av` FOREIGN KEY (`fk_tooth`) REFERENCES `tooth` (`id_tooth`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tooth_condition_rel`
+--
+
+LOCK TABLES `tooth_condition_rel` WRITE;
+/*!40000 ALTER TABLE `tooth_condition_rel` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tooth_condition_rel` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `tooth_face`
 --
 
@@ -1281,6 +1305,35 @@ CREATE TABLE `tooth_face` (
 LOCK TABLES `tooth_face` WRITE;
 /*!40000 ALTER TABLE `tooth_face` DISABLE KEYS */;
 /*!40000 ALTER TABLE `tooth_face` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tooth_face_condition_rel`
+--
+
+DROP TABLE IF EXISTS `tooth_face_condition_rel`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `tooth_face_condition_rel` (
+  `id_tooth_face_condition_rel` bigint(20) NOT NULL AUTO_INCREMENT,
+  `creation_date` date NOT NULL,
+  `fk_tooth_condition` bigint(20) DEFAULT NULL,
+  `fk_tooth_face` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`id_tooth_face_condition_rel`),
+  KEY `FK7cbt8x6ts48l2u3x1jjucboaa` (`fk_tooth_condition`),
+  KEY `FKla5ql9n2xrfkbk3dx0qeru4uo` (`fk_tooth_face`),
+  CONSTRAINT `FK7cbt8x6ts48l2u3x1jjucboaa` FOREIGN KEY (`fk_tooth_condition`) REFERENCES `tooth_condition` (`id_tooth_condition`),
+  CONSTRAINT `FKla5ql9n2xrfkbk3dx0qeru4uo` FOREIGN KEY (`fk_tooth_face`) REFERENCES `tooth_face` (`id_tooth_face`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tooth_face_condition_rel`
+--
+
+LOCK TABLES `tooth_face_condition_rel` WRITE;
+/*!40000 ALTER TABLE `tooth_face_condition_rel` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tooth_face_condition_rel` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -1376,4 +1429,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-08-17 23:06:46
+-- Dump completed on 2024-08-20  6:17:24
