@@ -77,14 +77,15 @@ CREATE TABLE odontograms (
 );
 
 -- Treatments Table
-CREATE TABLE treatments (
-    id_treatment INT PRIMARY KEY AUTO_INCREMENT,
+CREATE TABLE patient_clinical_histories (
+    id_patient_clinical_history INT PRIMARY KEY AUTO_INCREMENT,
     fk_clinical_history_catalog INT,
     fk_patient INT,
     date DATETIME,
-    FOREIGN KEY (fk_clinical_history_catalog) REFERENCES clinical_history_catalogs(id_clinical_history_catalog),
+    FOREIGN KEY (fk_clinical_history_catalog) REFERENCES clinical_history_catalog(id_clinical_history_catalog),
     FOREIGN KEY (fk_patient) REFERENCES Patients(id)
 );
+
 
 
 SELECT
