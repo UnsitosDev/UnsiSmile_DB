@@ -2,81 +2,90 @@
 create database if not exists ejemplo;
 use ejemplo;
 
-CREATE TABLE Pacientes (
+-- Patients Table
+CREATE TABLE Patients (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    expediente BIGINT,
-    nombre VARCHAR(100) NOT NULL
+    record_number BIGINT,
+    name VARCHAR(100) NOT NULL
 );
 
-CREATE TABLE catalogo_historias_clinicas (
-    id_catalogo_historia_clinica INT PRIMARY KEY AUTO_INCREMENT,
-    historia_linicas VARCHAR(100) NOT NULL
+-- ClinicalHistoryCatalog Table
+CREATE TABLE clinical_history_catalog (
+    id_clinical_history_catalog INT PRIMARY KEY AUTO_INCREMENT,
+    clinical_history_name VARCHAR(100) NOT NULL
 );
 
-
-CREATE TABLE secciones_formularios (
-    id_seccion_formulario INT PRIMARY KEY AUTO_INCREMENT,
-    formulario VARCHAR(100) NOT NULL
+-- FormSections Table
+CREATE TABLE form_sections (
+    id_form_section INT PRIMARY KEY AUTO_INCREMENT,
+    form_name VARCHAR(100) NOT NULL
 );
 
-CREATE TABLE secciones_historias_clinicas (
-    fk_catalogo_historia_clinica INT NOT NULL,
-    fk_seccion_formulario INT NOT NULL,
-    PRIMARY KEY (fk_catalogo_historia_clinica, fk_seccion_formulario),
-    FOREIGN KEY (fk_catalogo_historia_clinica) REFERENCES catalogo_historias_clinicas(id_catalogo_historia_clinica),
-    FOREIGN KEY (fk_seccion_formulario) REFERENCES secciones_formularios(id_seccion_formulario)
+-- ClinicalHistorySections Table
+CREATE TABLE clinical_history_sections (
+    fk_clinical_history_catalog INT NOT NULL,
+    fk_form_section INT NOT NULL,
+    PRIMARY KEY (fk_clinical_history_catalog, fk_form_section),
+    FOREIGN KEY (fk_clinical_history_catalog) REFERENCES clinical_history_catalog(id_clinical_history_catalog),
+    FOREIGN KEY (fk_form_section) REFERENCES form_sections(id_form_section)
 );
 
-CREATE TABLE preguntas (
-    id_pregunta INT PRIMARY KEY AUTO_INCREMENT,
-    pregunta_texto TEXT NOT NULL,
-    fk_seccion_formulario INT NOT NULL,
-    FOREIGN KEY (seccion_id) REFERENCES secciones_formularios(fk_seccion_formulario)
+-- Questions Table
+CREATE TABLE questions (
+    id_question INT PRIMARY KEY AUTO_INCREMENT,
+    question_text TEXT NOT NULL,
+    fk_form_section INT NOT NULL,
+    FOREIGN KEY (fk_form_section) REFERENCES form_sections(id_form_section)
 );
 
-CREATE TABLE catalogos (
-    id_catalogo INT PRIMARY KEY AUTO_INCREMENT,
-    nombre_catalogo VARCHAR(50) NOT NULL
+-- Catalogs Table (for predefined answer catalogs)
+CREATE TABLE catalogs (
+    id_catalog INT PRIMARY KEY AUTO_INCREMENT,
+    catalog_name VARCHAR(50) NOT NULL
 );
 
-CREATE TABLE opciones_catalogos (
-    id_opcion_catalogo INT PRIMARY KEY AUTO_INCREMENT,
-    fk_catalogo INT NOT NULL,
-    opcion VARCHAR(50) NOT NULL,
-    FOREIGN KEY (fk_catalogo) REFERENCES catalogos(id_catalogo)
+-- CatalogOptions Table (options within a predefined catalog)
+CREATE TABLE catalog_options (
+    id_catalog_option INT PRIMARY KEY AUTO_INCREMENT,
+    fk_catalog INT NOT NULL,
+    option_name VARCHAR(50) NOT NULL,
+    FOREIGN KEY (fk_catalog) REFERENCES catalogs(id_catalog)
 );
 
-CREATE TABLE respuestas (
-    id_respuesta INT PRIMARY KEY AUTO_INCREMENT,
-    fk_paciente INT NOT NULL,
-    fk_pregunta INT NOT NULL,
-    respuesta_boolean BOOLEAN,
-    respuesta_numerica DECIMAL(10, 2),
-    respuesta_texto TEXT,
-    fk_opcion INT NULL,  -- ID de la respuesta predefinida
-    tipo_respuesta ENUM('BOOLEAN', 'NUMERIC', 'TEXT', 'CATALOG') NOT NULL,
-    FOREIGN KEY (paciente_id) REFERENCES Pacientes(id),
-    FOREIGN KEY (pregunta_id) REFERENCES Preguntas(id),
-    FOREIGN KEY (opcion_id) REFERENCES OpcionesCatalogo(id)
+-- Answers Table
+CREATE TABLE answers (
+    id_answer INT PRIMARY KEY AUTO_INCREMENT,
+    fk_patient INT NOT NULL,
+    fk_question INT NOT NULL,
+    answer_boolean BOOLEAN,
+    answer_numeric DECIMAL(10, 2),
+    answer_text TEXT,
+    fk_option INT NULL,  -- ID of predefined answer
+    answer_type ENUM('BOOLEAN', 'NUMERIC', 'TEXT', 'CATALOG') NOT NULL,
+    FOREIGN KEY (fk_patient) REFERENCES Patients(id),
+    FOREIGN KEY (fk_question) REFERENCES questions(id_question),
+    FOREIGN KEY (fk_option) REFERENCES catalog_options(id_catalog_option)
 );
 
-
-CREATE TABLE odontogramas (
-    id_odontograma INT PRIMARY KEY AUTO_INCREMENT,
-    fk_paciente INT NOT NULL,
-    fk_seccion_formulario INT NOT NULL,
-    FOREIGN KEY (fk_paciente) REFERENCES pacientes(fk_paciente),
-    FOREIGN KEY (fk_seccion_formulario) REFERENCES secciones_formularios(fk_seccion_formulario)
+-- Odontograms Table
+CREATE TABLE odontograms (
+    id_odontogram INT PRIMARY KEY AUTO_INCREMENT,
+    fk_patient INT NOT NULL,
+    fk_form_section INT NOT NULL,
+    FOREIGN KEY (fk_patient) REFERENCES Patients(id),
+    FOREIGN KEY (fk_form_section) REFERENCES form_sections(id_form_section)
 );
 
-CREATE TABLE tratamientos (
-    id_tratamiento INT PRIMARY KEY AUTO_INCREMENT,
-    fk_catalogo_historia_clinica INT,
-    fk_paciente INT,
-    fecha DATETIME,
-    FOREIGN KEY (fk_catalogo_historia_clinica) REFERENCES catalogo_historias_clinicas(id_catalogo_historia_clinica),
-    FOREIGN KEY (fk_paciente) REFERENCES Pacientes(id)
+-- Treatments Table
+CREATE TABLE treatments (
+    id_treatment INT PRIMARY KEY AUTO_INCREMENT,
+    fk_clinical_history_catalog INT,
+    fk_patient INT,
+    date DATETIME,
+    FOREIGN KEY (fk_clinical_history_catalog) REFERENCES clinical_history_catalog(id_clinical_history_catalog),
+    FOREIGN KEY (fk_patient) REFERENCES Patients(id)
 );
+
 
 SELECT
     p.nombre AS paciente_nombre,
