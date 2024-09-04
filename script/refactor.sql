@@ -52,22 +52,6 @@ CREATE TABLE catalog_options (
     FOREIGN KEY (fk_catalog) REFERENCES catalogs(id_catalog)
 );
 
--- Answers Table
-CREATE TABLE answers (
-    id_answer INT PRIMARY KEY AUTO_INCREMENT,
-    fk_patient INT NOT NULL,
-    fk_question INT NOT NULL,
-    answer_boolean BOOLEAN,
-    answer_numeric DECIMAL(10, 2),
-    answer_text TEXT,
-    answer_date DATETIME,
-    fk_option INT NULL,  -- ID of predefined answer
-    answer_type ENUM('BOOLEAN', 'NUMERIC', 'TEXT', 'CATALOG') NOT NULL,
-    FOREIGN KEY (fk_patient) REFERENCES patients(id_patient),
-    FOREIGN KEY (fk_question) REFERENCES questions(id_question),
-    FOREIGN KEY (fk_option) REFERENCES catalog_options(id_catalog_option)
-);
-
 -- Odontograms Table
 CREATE TABLE odontograms (
     id_odontogram INT PRIMARY KEY AUTO_INCREMENT,
@@ -86,6 +70,23 @@ CREATE TABLE patient_clinical_histories (
     FOREIGN KEY (fk_clinical_history_catalog) REFERENCES clinical_history_catalogs(id_clinical_history_catalog),
     FOREIGN KEY (fk_patient) REFERENCES patients(id_patient)
 );
+
+-- Answers Table
+CREATE TABLE answers (
+    id_answer INT PRIMARY KEY AUTO_INCREMENT,
+    fk_patient_clinical_history INT NOT NULL,
+    fk_question INT NOT NULL,
+    answer_boolean BOOLEAN,
+    answer_numeric DECIMAL(10, 2),
+    answer_text TEXT,
+    answer_date DATETIME,
+    fk_option INT NULL,  -- ID of predefined answer
+    answer_type ENUM('BOOLEAN', 'NUMERIC', 'TEXT', 'CATALOG') NOT NULL,
+    FOREIGN KEY (fk_patient_clinical_history) REFERENCES patient_clinical_histories(id_patient_clinical_history),
+    FOREIGN KEY (fk_question) REFERENCES questions(id_question),
+    FOREIGN KEY (fk_option) REFERENCES catalog_options(id_catalog_option)
+);
+
 
 
 
