@@ -3,8 +3,8 @@ create database if not exists ejemplo;
 use ejemplo;
 
 -- Patients Table
-CREATE TABLE Patients (
-    id INT PRIMARY KEY AUTO_INCREMENT,
+CREATE TABLE patients (
+    id_patient INT PRIMARY KEY AUTO_INCREMENT,
     record_number BIGINT,
     name VARCHAR(100) NOT NULL
 );
@@ -62,7 +62,7 @@ CREATE TABLE answers (
     answer_text TEXT,
     fk_option INT NULL,  -- ID of predefined answer
     answer_type ENUM('BOOLEAN', 'NUMERIC', 'TEXT', 'CATALOG') NOT NULL,
-    FOREIGN KEY (fk_patient) REFERENCES Patients(id),
+    FOREIGN KEY (fk_patient) REFERENCES patients(id_patient),
     FOREIGN KEY (fk_question) REFERENCES questions(id_question),
     FOREIGN KEY (fk_option) REFERENCES catalog_options(id_catalog_option)
 );
@@ -72,7 +72,7 @@ CREATE TABLE odontograms (
     id_odontogram INT PRIMARY KEY AUTO_INCREMENT,
     fk_patient INT NOT NULL,
     fk_form_section INT NOT NULL,
-    FOREIGN KEY (fk_patient) REFERENCES Patients(id),
+    FOREIGN KEY (fk_patient) REFERENCES patients(id_patient),
     FOREIGN KEY (fk_form_section) REFERENCES form_sections(id_form_section)
 );
 
@@ -82,8 +82,8 @@ CREATE TABLE patient_clinical_histories (
     fk_clinical_history_catalog INT,
     fk_patient INT,
     date DATETIME,
-    FOREIGN KEY (fk_clinical_history_catalog) REFERENCES clinical_history_catalog(id_clinical_history_catalog),
-    FOREIGN KEY (fk_patient) REFERENCES Patients(id)
+    FOREIGN KEY (fk_clinical_history_catalog) REFERENCES clinical_history_catalogs(id_clinical_history_catalog),
+    FOREIGN KEY (fk_patient) REFERENCES patients(id_patient)
 );
 
 
