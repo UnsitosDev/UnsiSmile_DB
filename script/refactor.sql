@@ -10,7 +10,7 @@ CREATE TABLE Patients (
 );
 
 -- ClinicalHistoryCatalog Table
-CREATE TABLE clinical_history_catalog (
+CREATE TABLE clinical_history_catalogs (
     id_clinical_history_catalog INT PRIMARY KEY AUTO_INCREMENT,
     clinical_history_name VARCHAR(100) NOT NULL
 );
@@ -26,7 +26,7 @@ CREATE TABLE clinical_history_sections (
     fk_clinical_history_catalog INT NOT NULL,
     fk_form_section INT NOT NULL,
     PRIMARY KEY (fk_clinical_history_catalog, fk_form_section),
-    FOREIGN KEY (fk_clinical_history_catalog) REFERENCES clinical_history_catalog(id_clinical_history_catalog),
+    FOREIGN KEY (fk_clinical_history_catalog) REFERENCES clinical_history_catalogs(id_clinical_history_catalog),
     FOREIGN KEY (fk_form_section) REFERENCES form_sections(id_form_section)
 );
 
@@ -82,7 +82,7 @@ CREATE TABLE treatments (
     fk_clinical_history_catalog INT,
     fk_patient INT,
     date DATETIME,
-    FOREIGN KEY (fk_clinical_history_catalog) REFERENCES clinical_history_catalog(id_clinical_history_catalog),
+    FOREIGN KEY (fk_clinical_history_catalog) REFERENCES clinical_history_catalogs(id_clinical_history_catalog),
     FOREIGN KEY (fk_patient) REFERENCES Patients(id)
 );
 
