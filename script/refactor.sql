@@ -60,6 +60,7 @@ CREATE TABLE answers (
     answer_boolean BOOLEAN,
     answer_numeric DECIMAL(10, 2),
     answer_text TEXT,
+    answer_date DATETIME,
     fk_option INT NULL,  -- ID of predefined answer
     answer_type ENUM('BOOLEAN', 'NUMERIC', 'TEXT', 'CATALOG') NOT NULL,
     FOREIGN KEY (fk_patient) REFERENCES patients(id_patient),
