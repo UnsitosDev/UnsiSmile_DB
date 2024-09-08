@@ -35,6 +35,9 @@ CREATE TABLE questions (
     id_question INT PRIMARY KEY AUTO_INCREMENT,
     question_text TEXT NOT NULL,
     fk_form_section INT NOT NULL,
+    answer_type ENUM('BOOLEAN', 'NUMERIC', 'TEXT', 'CATALOG') NOT NULL,
+    fk_catalog INT NOT NULL,
+    FOREIGN KEY (fk_catalog) REFERENCES catalogs(id_catalog)
     FOREIGN KEY (fk_form_section) REFERENCES form_sections(id_form_section)
 );
 
@@ -81,7 +84,6 @@ CREATE TABLE answers (
     answer_text TEXT,
     answer_date DATETIME,
     fk_option INT NULL,  -- ID of predefined answer
-    answer_type ENUM('BOOLEAN', 'NUMERIC', 'TEXT', 'CATALOG') NOT NULL,
     FOREIGN KEY (fk_patient_clinical_history) REFERENCES patient_clinical_histories(id_patient_clinical_history),
     FOREIGN KEY (fk_question) REFERENCES questions(id_question),
     FOREIGN KEY (fk_option) REFERENCES catalog_options(id_catalog_option)
