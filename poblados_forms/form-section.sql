@@ -1,3 +1,4 @@
+-- secciones padre
 INSERT INTO form_sections
 (form_name)
 VALUES
@@ -12,7 +13,6 @@ VALUES
 ("Exámen clínico"),
 ("Análisis funcional"),
 ("Postura del paciente"),
-("Postura del paciente"),
 ("Exámen bucal"),
 ("Análisis radiográfico"),
 ("Modelos de estudio de fotografías"),
@@ -20,4 +20,11 @@ VALUES
 ("Interconsulta médica"),
 ("Consentimiento informado"),
 ("Nota de evolución")
+;
+
+-- secciones hijas
+INSERT INTO form_sections
+(form_name, fk_parent_section)
+VALUES
+("Clasificación de Angle", 12)
 ;
