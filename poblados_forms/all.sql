@@ -81,7 +81,8 @@ INSERT INTO catalogs
 (catalog_name)
 VALUES
     ("Perfil facial"),
-    ("Morfología facial")
+    ("Morfología facial"),
+    ("Clases de angles"),
 ;
 
 
@@ -94,11 +95,14 @@ VALUES
     ( 1, "Convexo"),
     ( 2, "Braquifacial"),
     ( 2, "Normofacial"),
-    ( 2, "Dolicofacial")
+    ( 2, "Dolicofacial"),
+    (3, "Clase I"),
+    (3, "Clase II"),
+    (3, "Clase III")
 ;
 
 
--- (1,"BOOLEAN"), (2,"NUMERIC"), (3, "TEXT"), (4, "CATALOG"), (4, "MULTIVALUED"), (5,"FILE")
+-- (1,"BOOLEAN"), (2,"NUMERIC"), (3, "TEXT"), (4, "CATALOG"), (5, "MULTIVALUED"), (6,"FILE")
 
 -- Signos vitales
 INSERT INTO questions
@@ -121,12 +125,13 @@ INSERT INTO questions
 (question_text,
  fk_form_section,
  fk_answer_type,
+ fk_catalog,
  question_order,
  required)
 VALUES
-    ("Perfil",2,4, 1, true),
-    ("Frente",2,4, 2, true),
-    ("Señas particulares",2,4, 3, true)
+    ("Perfil", 2, 4, 1, 1, true),
+    ("Frente", 2, 4, 2, 2, true),
+    ("Señas particulares",2,4, null, 3, true)
 ;
 
 -- Antecedentes heredofamiliares
@@ -255,13 +260,14 @@ INSERT INTO questions
 (question_text,
  fk_form_section,
  fk_answer_type,
+ fk_catalog,
  question_order,
  required)
 VALUES
-    ("Relación molar: Derecha", 19, 4, 1, true),
-    ("Relación molar: Izquierda", 19, 4, 2, true),
-    ("Relación canina: Derecha", 19, 4, 3, true),
-    ("Relación canina: Izquierda", 19, 4, 4, true)
+    ("Relación molar: Derecha", 19, 4, 3, 1, true),
+    ("Relación molar: Izquierda", 19, 4, 3, 2, true),
+    ("Relación canina: Derecha", 19, 4, 3, 3, true),
+    ("Relación canina: Izquierda", 19, 4, 3, 4, true)
 ;
 
 -- Análisis radiográfico
