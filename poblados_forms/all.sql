@@ -131,7 +131,7 @@ INSERT INTO questions
 VALUES
     ("Perfil", 2, 4, 1, 1, true),
     ("Frente", 2, 4, 2, 2, true),
-    ("Señas particulares",2,4, null, 3, true)
+    ("Señas particulares",2, 3, null, 3, true)
 ;
 
 -- Antecedentes heredofamiliares
