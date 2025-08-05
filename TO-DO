@@ -1,8 +1,0 @@
-create table interconsulta_medica(
-id_interconsulta_medica int not null auto_increment primary key,
-nombre_medico varchar(100),
-razon text,
-motivo_diagnostico_presuntivo text,
-motivo_de_envio text,
-servicio_al_que_se_envia text
-);
