@@ -145,4 +145,4 @@ insert into groups (semester_number, group_name, fk_career, fk_semester, status_
 
 
 -- asignar un alumno a un grupo
-insert into student_groups(fk_student, fk_group, status_key) values("2019060310", 1, "A");
+insert into student_groups(fk_student, fk_group, status_key) values("2023070425", 1, "A");
